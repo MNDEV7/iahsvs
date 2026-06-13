@@ -1,0 +1,3427 @@
+--[[
+    ╔══════════════════════════════════════════════════════╗
+    ║         InfiniteMNDEV - Orca Hub                     ║
+    ║         Created by: InfiniteMNDEV                    ║
+    ║         UI Library: WindUI (Beta)                    ║
+    ║         Docs: https://footagesus-windui.mintlify.app ║
+    ╚══════════════════════════════════════════════════════╝
+]]
+
+-- ============================================================
+-- SERVICES
+-- ============================================================
+local Players             = game:GetService("Players")
+local RunService          = game:GetService("RunService")
+local UserInputService    = game:GetService("UserInputService")
+local ContextActionService = game:GetService("ContextActionService")
+
+local player = Players.LocalPlayer
+
+-- ============================================================
+-- LOAD WINDUI
+-- ============================================================
+local WindUI = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"
+))()
+
+-- ============================================================
+-- CREATE WINDOW
+-- ============================================================
+local Window = WindUI:CreateWindow({
+    Title        = "Orca Hub - Asylum Life",
+    Author       = "by InfiniteMNDEV",
+    Icon         = "infinity",
+    Theme        = "Midnight",
+    Folder       = "InfiniteMNDEV",
+
+    Size         = UDim2.fromOffset(80, 80),
+    MinSize      = Vector2.new(560, 400),
+    MaxSize      = Vector2.new(900, 620),
+
+    Resizable    = true,
+    AutoScale    = false,
+    NewElements  = true,
+
+    ToggleKey    = Enum.KeyCode.RightShift,
+    SideBarWidth = 210,
+
+    Topbar = {
+        Height      = 56,
+        ButtonsType = "Default",
+    },
+
+    OpenButton = {
+        Title     = "InfiniteMNDEV",
+        Enabled   = true,
+        Draggable = true,
+        Scale     = 1,
+        Color     = ColorSequence.new(
+            Color3.fromHex("#4F8EF7"),
+            Color3.fromHex("#9B5CF6")
+        ),
+    },
+
+    User = {
+        Enabled   = false,
+        Anonymous = false,
+    }
+})
+
+-- ============================================================
+-- WELCOME NOTIFICATION
+-- ============================================================
+WindUI:Notify({
+    Title    = "🐬 Orca Hub",
+    Content  = "Orca Hub loaded successfully!",
+    Icon     = "solar:star-bold",
+    Duration = 4,
+})
+
+-- ============================================================
+-- TAB SECTION: Credits & Settings
+-- ============================================================
+Window:Section({
+    Title  = "Credits & Settings",
+    Opened = true,
+})
+
+-- ============================================================
+-- TAB: Credits
+-- ============================================================
+local CreditsTab = Window:Tab({
+    Title = "Credits",
+    Icon  = "star",
+})
+
+-- ── Section: 👋 System Greetings ──────────────────────────
+local GreetingsSection = CreditsTab:Section({
+    Title  = "👋 System Greetings",
+    Box    = false,
+    Opened = true,
+})
+
+GreetingsSection:Paragraph({
+    Title = "Welcome to Orca Hub!",
+    Desc  = "Thank you for using Orca Hub Aka killer whale hub!",
+})
+
+-- ── Section: 🛡 Development Team ─────────────────────────
+local DevTeamSection = CreditsTab:Section({
+    Title  = "🛡 Development Team",
+    Box    = false,
+    Opened = true,
+})
+
+DevTeamSection:Paragraph({
+    Title = "🛠 — Created by InfiniteMNDEV",
+    Desc  = "Lead developer & project founder of Orca Hub.",
+})
+
+DevTeamSection:Paragraph({
+    Title = "🔨 — x0b0unty: Moderation Director",
+    Desc  = "Oversees moderation and community safety.",
+})
+
+DevTeamSection:Paragraph({
+    Title = "🎓 — Hero: Community Manager",
+    Desc  = "Manages the community and player experience.",
+})
+
+-- ── Section: 📺 Social Media ─────────────────────────────
+local SocialSection = CreditsTab:Section({
+    Title  = "📺 Social Media",
+    Box    = false,
+    Opened = true,
+})
+
+SocialSection:Button({
+    Title    = "Copy YouTube Link",
+    Desc     = "Copy the official Orca Hub YouTube channel link.",
+    Callback = function()
+        setclipboard("https://youtube.com/@infinitemndev?si=aC3coJXU0GLKIWqg")
+        WindUI:Notify({
+            Title    = "📋 Copied!",
+            Content  = "YouTube link copied to clipboard.",
+            Icon     = "solar:check-circle-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+SocialSection:Button({
+    Title    = "Copy Discord Link",
+    Desc     = "Copy the official Orca Hub Discord invite link.",
+    Callback = function()
+        setclipboard("https://discord.gg/sN4thG6SUv")
+        WindUI:Notify({
+            Title    = "📋 Copied!",
+            Content  = "Discord link copied to clipboard.",
+            Icon     = "solar:check-circle-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- TAB: Settings
+-- ============================================================
+local SettingsTab = Window:Tab({
+    Title = "Settings",
+    Icon  = "settings",
+})
+
+-- ── Section: 🖥 Theme Changer ─────────────────────────────
+local ThemeSection = SettingsTab:Section({
+    Title  = "🖥 Theme Changer",
+    Box    = false,
+    Opened = true,
+})
+
+ThemeSection:Dropdown({
+    Title     = "Select Theme",
+    Desc      = "Choose a UI theme for Orca Hub.",
+    Values    = { "Midnight", "Light", "Dark", "Aqua", "Rose" },
+    Value     = { "Midnight" },
+    Multi     = false,
+    AllowNone = false,
+    Callback  = function(selected)
+        WindUI:SetTheme(selected)
+        WindUI:Notify({
+            Title    = "🎨 Theme Changed",
+            Content  = "Theme set to: " .. tostring(selected),
+            Icon     = "solar:palette-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- TAB SECTION: Combat
+-- ============================================================
+Window:Section({
+    Title  = "Combat",
+    Opened = true,
+})
+
+-- ============================================================
+-- TAB: Player
+-- ============================================================
+local PlayerTab = Window:Tab({
+    Title = "Player",
+    Icon  = "user",
+})
+
+-- ============================================================
+-- TAB: Visuals
+-- ============================================================
+local VisualsTab = Window:Tab({
+    Title = "Visuals",
+    Icon  = "eye",
+})
+
+-- ============================================================
+-- VISUALS — SHARED SERVICES
+-- ============================================================
+local Teams       = game:GetService("Teams")
+local TweenService = game:GetService("TweenService")
+local Camera      = workspace.CurrentCamera
+
+-- ============================================================
+-- SECTION: 👥 Player Highlight
+-- ============================================================
+local HighlightSection = VisualsTab:Section({
+    Title  = "👥 Player Highlight",
+    Box    = false,
+    Opened = true,
+})
+
+-- ── State ────────────────────────────────────────────────
+local hlConfig = {
+    Enabled      = false,
+    SelectedTeams = {},
+    FillAlpha    = 0.55,
+    OutlineAlpha = 0,
+    UseTeamColor = true,
+    CustomFill   = Color3.fromRGB(255, 80, 80),
+    CustomOutline = Color3.fromRGB(255, 255, 255),
+}
+local hlInstances = {}   -- [Player] = Highlight
+
+-- ── Core logic ───────────────────────────────────────────
+local function hlShouldShow(p)
+    if not hlConfig.Enabled then return false end
+    local teamName = p.Team and p.Team.Name
+    if not teamName then return false end
+    for _, n in ipairs(hlConfig.SelectedTeams) do
+        if n == teamName then return true end
+    end
+    return false
+end
+
+local function hlApply(p)
+    if p == player then return end
+    local char = p.Character
+    if not char then return end
+    if hlInstances[p] then
+        pcall(function() hlInstances[p]:Destroy() end)
+        hlInstances[p] = nil
+    end
+    if not hlShouldShow(p) then return end
+    local col = (hlConfig.UseTeamColor and p.Team)
+        and p.TeamColor.Color or hlConfig.CustomFill
+    local hl = Instance.new("Highlight")
+    hl.FillTransparency    = hlConfig.FillAlpha
+    hl.OutlineTransparency = hlConfig.OutlineAlpha
+    hl.FillColor           = col
+    hl.OutlineColor        = hlConfig.UseTeamColor and col or hlConfig.CustomOutline
+    hl.Adornee             = char
+    hl.Parent              = char
+    hlInstances[p]         = hl
+end
+
+local function hlRemove(p)
+    if hlInstances[p] then
+        pcall(function() hlInstances[p]:Destroy() end)
+        hlInstances[p] = nil
+    end
+end
+
+local function hlRefreshAll()
+    for _, p in ipairs(Players:GetPlayers()) do hlApply(p) end
+end
+
+local function hlClearAll()
+    for p, hl in pairs(hlInstances) do
+        pcall(function() hl:Destroy() end)
+        hlInstances[p] = nil
+    end
+end
+
+local function hlHookPlayer(p)
+    if p == player then return end
+    if p.Character then hlApply(p) end
+    p.CharacterAdded:Connect(function()
+        task.wait(0.1); hlApply(p)
+    end)
+    p.CharacterRemoving:Connect(function()
+        hlInstances[p] = nil
+    end)
+    p:GetPropertyChangedSignal("Team"):Connect(function()
+        task.wait(0.1); hlApply(p)
+    end)
+end
+
+for _, p in ipairs(Players:GetPlayers()) do hlHookPlayer(p) end
+Players.PlayerAdded:Connect(hlHookPlayer)
+Players.PlayerRemoving:Connect(hlRemove)
+
+task.spawn(function()
+    while true do task.wait(3); hlRefreshAll() end
+end)
+
+-- ── UI elements ──────────────────────────────────────────
+
+-- Master toggle
+local HlToggle = HighlightSection:Toggle({
+    Title    = "Enable Player Highlight",
+    Desc     = "Toggle highlights on or off for selected teams.",
+    Default  = false,
+    Callback = function(state)
+        hlConfig.Enabled = state
+        if state then hlRefreshAll() else hlClearAll() end
+    end,
+})
+
+-- Team dropdown (built from live teams, refreshed dynamically)
+local function getTeamNames()
+    local names = {}
+    for _, t in ipairs(Teams:GetTeams()) do
+        table.insert(names, t.Name)
+    end
+    return names
+end
+
+local HlTeamDropdown = HighlightSection:Dropdown({
+    Title     = "Highlight Teams",
+    Desc      = "Select which teams to highlight.",
+    Values    = getTeamNames(),
+    Value     = {},
+    Multi     = true,
+    AllowNone = true,
+    Callback  = function(selected)
+        hlConfig.SelectedTeams = {}
+        if type(selected) == "table" then
+            for _, v in pairs(selected) do
+                table.insert(hlConfig.SelectedTeams, v)
+            end
+        elseif type(selected) == "string" then
+            table.insert(hlConfig.SelectedTeams, selected)
+        end
+        hlRefreshAll()
+    end,
+})
+
+-- Refresh dropdown when teams change
+Teams.ChildAdded:Connect(function(c)
+    if c:IsA("Team") then
+        task.wait(0.1)
+        HlTeamDropdown:Refresh(getTeamNames(), {})
+    end
+end)
+Teams.ChildRemoved:Connect(function(c)
+    if c:IsA("Team") then
+        hlConfig.SelectedTeams = {}
+        HlTeamDropdown:Refresh(getTeamNames(), {})
+        hlRefreshAll()
+    end
+end)
+
+-- Use team colour toggle
+HighlightSection:Toggle({
+    Title    = "Use Team Colour",
+    Desc     = "Use each team's own colour instead of a custom colour.",
+    Default  = true,
+    Callback = function(state)
+        hlConfig.UseTeamColor = state
+        hlRefreshAll()
+    end,
+})
+
+-- Fill opacity input
+HighlightSection:Input({
+    Title       = "Fill Opacity (0.0 – 1.0)",
+    Desc        = "0 = fully opaque fill, 1 = invisible fill. Supports decimals.",
+    Placeholder = "Default: 0.55",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num >= 0 and num <= 1 then
+            hlConfig.FillAlpha = num
+            hlRefreshAll()
+        end
+    end,
+})
+
+-- Outline opacity input
+HighlightSection:Input({
+    Title       = "Outline Opacity (0.0 – 1.0)",
+    Desc        = "0 = solid outline, 1 = invisible outline. Supports decimals.",
+    Placeholder = "Default: 0",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num >= 0 and num <= 1 then
+            hlConfig.OutlineAlpha = num
+            hlRefreshAll()
+        end
+    end,
+})
+
+-- Reset button
+HighlightSection:Button({
+    Title    = "Reset Player Highlight",
+    Desc     = "Disable highlight and restore all settings to default.",
+    Callback = function()
+        hlConfig.Enabled       = false
+        hlConfig.SelectedTeams = {}
+        hlConfig.FillAlpha     = 0.55
+        hlConfig.OutlineAlpha  = 0
+        hlConfig.UseTeamColor  = true
+        HlToggle:Set(false)
+        HlTeamDropdown:Refresh(getTeamNames(), {})
+        hlClearAll()
+        WindUI:Notify({
+            Title    = "👥 Highlight Reset",
+            Content  = "Player Highlight restored to defaults.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SECTION: 🗃 Outline Visuals (Box ESP + Health Bar)
+-- ============================================================
+local OutlineSection = VisualsTab:Section({
+    Title  = "🗃 Outline Visuals",
+    Box    = false,
+    Opened = true,
+})
+
+-- ── State ────────────────────────────────────────────────
+local boxEnabled    = false
+local healthEnabled = false
+local espCache      = {}
+
+local function espCreate(p)
+    if p == player then return end
+    local esp = {}
+    -- Box outline
+    esp.BoxOutline             = Drawing.new("Square")
+    esp.BoxOutline.Visible     = false
+    esp.BoxOutline.Color       = Color3.fromRGB(0, 0, 0)
+    esp.BoxOutline.Thickness   = 3
+    esp.BoxOutline.Transparency = 1
+    esp.BoxOutline.Filled      = false
+    -- Box fill
+    esp.Box                    = Drawing.new("Square")
+    esp.Box.Visible            = false
+    esp.Box.Color              = Color3.fromRGB(255, 255, 255)
+    esp.Box.Thickness          = 1
+    esp.Box.Transparency       = 1
+    esp.Box.Filled             = false
+    -- Health bar outline
+    esp.HealthOutline             = Drawing.new("Square")
+    esp.HealthOutline.Visible     = false
+    esp.HealthOutline.Color       = Color3.fromRGB(0, 0, 0)
+    esp.HealthOutline.Thickness   = 1
+    esp.HealthOutline.Transparency = 1
+    esp.HealthOutline.Filled      = true
+    -- Health bar fill
+    esp.HealthBar                 = Drawing.new("Square")
+    esp.HealthBar.Visible         = false
+    esp.HealthBar.Color           = Color3.fromRGB(0, 255, 0)
+    esp.HealthBar.Thickness       = 1
+    esp.HealthBar.Transparency    = 1
+    esp.HealthBar.Filled          = true
+    -- Health text
+    esp.HealthText                = Drawing.new("Text")
+    esp.HealthText.Visible        = false
+    esp.HealthText.Color          = Color3.fromRGB(255, 255, 255)
+    esp.HealthText.Size           = 13
+    esp.HealthText.Center         = true
+    esp.HealthText.Outline        = true
+    esp.HealthText.OutlineColor   = Color3.fromRGB(0, 0, 0)
+    espCache[p] = esp
+end
+
+local function espRemove(p)
+    if espCache[p] then
+        for _, d in pairs(espCache[p]) do pcall(function() d:Remove() end) end
+        espCache[p] = nil
+    end
+end
+
+local function espHideAll(p)
+    if not espCache[p] then return end
+    local esp = espCache[p]
+    esp.Box.Visible          = false
+    esp.BoxOutline.Visible   = false
+    esp.HealthOutline.Visible = false
+    esp.HealthBar.Visible    = false
+    esp.HealthText.Visible   = false
+end
+
+for _, p in ipairs(Players:GetPlayers()) do espCreate(p) end
+Players.PlayerAdded:Connect(espCreate)
+Players.PlayerRemoving:Connect(espRemove)
+
+-- Single shared render loop for both box and health bar
+RunService.RenderStepped:Connect(function()
+    if not boxEnabled and not healthEnabled then return end
+    for p, esp in pairs(espCache) do
+        local char = p.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            local hrp      = char.HumanoidRootPart
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            local screenPos, onScreen = Camera:WorldToViewportPoint(hrp.Position)
+            if onScreen then
+                local dist  = (Camera.CFrame.Position - hrp.Position).Magnitude
+                local sizeX = math.clamp(2000 / dist, 10, 300)
+                local sizeY = math.clamp(3000 / dist, 15, 450)
+                local boxPos = Vector2.new(screenPos.X - sizeX / 2, screenPos.Y - sizeY / 2)
+
+                -- Box ESP
+                esp.Box.Size         = Vector2.new(sizeX, sizeY)
+                esp.Box.Position     = boxPos
+                esp.Box.Visible      = boxEnabled
+                esp.BoxOutline.Size     = Vector2.new(sizeX, sizeY)
+                esp.BoxOutline.Position = boxPos
+                esp.BoxOutline.Visible  = boxEnabled
+
+                -- Health bar
+                local health       = humanoid and humanoid.Health    or 0
+                local maxHealth    = humanoid and humanoid.MaxHealth  or 100
+                local hPercent     = math.clamp(health / maxHealth, 0, 1)
+                local barW, barH   = 4, sizeY
+                local barOffset    = 6
+                local barPos       = Vector2.new(boxPos.X - barOffset, boxPos.Y)
+                local curBarHeight = barH * hPercent
+
+                esp.HealthOutline.Size     = Vector2.new(barW, barH)
+                esp.HealthOutline.Position = barPos
+                esp.HealthOutline.Visible  = healthEnabled
+
+                esp.HealthBar.Size     = Vector2.new(barW - 2, curBarHeight - 2)
+                esp.HealthBar.Position = Vector2.new(barPos.X + 1, barPos.Y + (barH - curBarHeight) + 1)
+                esp.HealthBar.Visible  = healthEnabled and health > 0
+
+                esp.HealthText.Text     = string.format("%d", math.floor(health))
+                esp.HealthText.Position = Vector2.new(barPos.X - 10, barPos.Y + (barH - curBarHeight) - 7)
+                esp.HealthText.Visible  = healthEnabled
+            else
+                espHideAll(p)
+            end
+        else
+            espHideAll(p)
+        end
+    end
+end)
+
+-- ── Toggles ──────────────────────────────────────────────
+OutlineSection:Toggle({
+    Title    = "Box Outline",
+    Desc     = "Draw a 2D box around every player on screen.",
+    Default  = false,
+    Callback = function(state)
+        boxEnabled = state
+        if not state then
+            for p in pairs(espCache) do
+                espCache[p].Box.Visible       = false
+                espCache[p].BoxOutline.Visible = false
+            end
+        end
+    end,
+})
+
+OutlineSection:Toggle({
+    Title    = "Health Bar Visual",
+    Desc     = "Show a health bar beside each player's box.",
+    Default  = false,
+    Callback = function(state)
+        healthEnabled = state
+        if not state then
+            for p in pairs(espCache) do
+                espCache[p].HealthOutline.Visible = false
+                espCache[p].HealthBar.Visible     = false
+                espCache[p].HealthText.Visible    = false
+            end
+        end
+    end,
+})
+
+-- ============================================================
+-- SECTION: 💢 Hostile Tracking
+-- ============================================================
+local HostileSection = VisualsTab:Section({
+    Title  = "💢 Hostile Tracking",
+    Box    = false,
+    Opened = true,
+})
+
+-- ── State ────────────────────────────────────────────────
+local tracerEnabled = false
+local tracerCache   = {}
+
+local PatientTeam = Teams:FindFirstChild("PATIENT")
+-- Re-fetch if teams load after script
+if not PatientTeam then
+    Teams.ChildAdded:Connect(function(c)
+        if c:IsA("Team") and c.Name == "PATIENT" then
+            PatientTeam = c
+        end
+    end)
+end
+
+local function isHostilePatient(p)
+    if not p or p == player then return false end
+    if not PatientTeam then return false end
+    if p.Team ~= PatientTeam then return false end
+    if p:GetAttribute("IsTagged") ~= true then return false end
+    return true
+end
+
+local function tracerCreate(p)
+    if p == player then return end
+    local t = {}
+    t.Outline             = Drawing.new("Line")
+    t.Outline.Visible     = false
+    t.Outline.Color       = Color3.fromRGB(0, 0, 0)
+    t.Outline.Thickness   = 3
+    t.Outline.Transparency = 1
+    t.Line                = Drawing.new("Line")
+    t.Line.Visible        = false
+    t.Line.Color          = Color3.fromRGB(255, 0, 0)
+    t.Line.Thickness      = 1
+    t.Line.Transparency   = 1
+    tracerCache[p] = t
+end
+
+local function tracerRemove(p)
+    if tracerCache[p] then
+        for _, d in pairs(tracerCache[p]) do pcall(function() d:Remove() end) end
+        tracerCache[p] = nil
+    end
+end
+
+for _, p in ipairs(Players:GetPlayers()) do tracerCreate(p) end
+Players.PlayerAdded:Connect(tracerCreate)
+Players.PlayerRemoving:Connect(tracerRemove)
+
+RunService.RenderStepped:Connect(function()
+    if not tracerEnabled then return end
+    local vp     = Camera.ViewportSize
+    local origin = Vector2.new(vp.X / 2, vp.Y)
+    for p, t in pairs(tracerCache) do
+        if isHostilePatient(p) then
+            local char = p.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local screenPos, onScreen = Camera:WorldToViewportPoint(char.HumanoidRootPart.Position)
+                if onScreen then
+                    local target = Vector2.new(screenPos.X, screenPos.Y)
+                    t.Outline.From    = origin
+                    t.Outline.To      = target
+                    t.Outline.Visible = true
+                    t.Line.From       = origin
+                    t.Line.To         = target
+                    t.Line.Visible    = true
+                else
+                    t.Outline.Visible = false
+                    t.Line.Visible    = false
+                end
+            else
+                t.Outline.Visible = false
+                t.Line.Visible    = false
+            end
+        else
+            t.Outline.Visible = false
+            t.Line.Visible    = false
+        end
+    end
+end)
+
+-- ── Toggle ───────────────────────────────────────────────
+HostileSection:Toggle({
+    Title    = "Trace Hostile",
+    Desc     = "Draw a tracer line to tagged PATIENT team hostiles.",
+    Default  = false,
+    Callback = function(state)
+        tracerEnabled = state
+        if not state then
+            for _, t in pairs(tracerCache) do
+                t.Outline.Visible = false
+                t.Line.Visible    = false
+            end
+        end
+    end,
+})
+
+-- ============================================================
+-- TAB: Lock On
+-- ============================================================
+local LockOnTab = Window:Tab({
+    Title = "Lock On",
+    Icon  = "crosshair",
+})
+
+-- ============================================================
+-- LOCK ON — CONFIG & STATE
+-- ============================================================
+local LockConfig = {
+    FOV_RADIUS    = 150,
+    LOCK_DISTANCE = 300,
+    COLOR_IDLE    = Color3.fromRGB(0, 255, 120),
+    COLOR_LOCKED  = Color3.fromRGB(255, 50, 50),
+    COLOR_UI_BG   = Color3.fromRGB(15, 15, 20),
+    COLOR_UI_PANEL= Color3.fromRGB(22, 22, 30),
+    COLOR_ACCENT  = Color3.fromRGB(0, 200, 255),
+    COLOR_ON      = Color3.fromRGB(0, 220, 100),
+    COLOR_OFF     = Color3.fromRGB(200, 60, 60),
+}
+
+-- Only Head and HumanoidRootPart as target options
+local LOCK_PARTS = { "HumanoidRootPart", "Head" }
+
+local lockEnabled     = false
+local locked          = false
+local lockedTarget    = nil
+local lockTargetPart  = "HumanoidRootPart"
+local lockTeamFilter  = {}   -- [teamName] = true means selected (highlight that team)
+local isMobile        = false
+
+do
+    local ok, result = pcall(function()
+        return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+    end)
+    isMobile = ok and result or false
+end
+
+-- ============================================================
+-- LOCK ON — WINDUI SECTION
+-- ============================================================
+local LockSection = LockOnTab:Section({
+    Title  = "🎯 Lock On",
+    Box    = false,
+    Opened = true,
+})
+
+-- Master toggle
+local LockToggle = LockSection:Toggle({
+    Title    = "Enable Lock On",
+    Desc     = "Activate the lock-on system. Works on both PC and Mobile.",
+    Default  = false,
+    Callback = function(state)
+        lockEnabled = state
+        if not state then
+            locked = false
+            lockedTarget = nil
+        end
+    end,
+})
+
+-- Keybind toggle (PC note)
+LockSection:Paragraph({
+    Title = "⌨️ PC Keybind",
+    Desc  = "Press [Q] to lock/unlock a target while Lock On is enabled. This is for PC users — mobile uses the on-screen crosshair button.",
+})
+
+local keybindEnabled = false
+local LockKeybindToggle = LockSection:Toggle({
+    Title    = "Enable Q Keybind",
+    Desc     = "Toggle the [Q] keybind for PC lock-on activation.",
+    Default  = false,
+    Callback = function(state)
+        keybindEnabled = state
+    end,
+})
+
+-- Target part dropdown (Head or HumanoidRootPart only)
+LockSection:Dropdown({
+    Title     = "Target Part",
+    Desc      = "Choose which part of the player to aim at.",
+    Values    = LOCK_PARTS,
+    Value     = { "HumanoidRootPart" },
+    Multi     = false,
+    AllowNone = false,
+    Callback  = function(selected)
+        lockTargetPart = selected
+        locked = false
+        lockedTarget = nil
+    end,
+})
+
+-- Team filter dropdown (multi-select — only players on selected teams get locked)
+local function getLockTeamNames()
+    local names = {}
+    for _, t in ipairs(Teams:GetTeams()) do
+        table.insert(names, t.Name)
+    end
+    return names
+end
+
+local LockTeamDropdown = LockSection:Dropdown({
+    Title     = "Target Teams",
+    Desc      = "Only lock onto players from the selected teams. Leave empty to target everyone.",
+    Values    = getLockTeamNames(),
+    Value     = {},
+    Multi     = true,
+    AllowNone = true,
+    Callback  = function(selected)
+        lockTeamFilter = {}
+        if type(selected) == "table" then
+            for _, v in pairs(selected) do lockTeamFilter[v] = true end
+        elseif type(selected) == "string" and selected ~= "" then
+            lockTeamFilter[selected] = true
+        end
+        locked = false
+        lockedTarget = nil
+    end,
+})
+
+-- Refresh dropdown when teams change
+Teams.ChildAdded:Connect(function(c)
+    if c:IsA("Team") then
+        task.wait(0.1)
+        LockTeamDropdown:Refresh(getLockTeamNames(), {})
+    end
+end)
+Teams.ChildRemoved:Connect(function(c)
+    if c:IsA("Team") then
+        lockTeamFilter = {}
+        LockTeamDropdown:Refresh(getLockTeamNames(), {})
+        locked = false; lockedTarget = nil
+    end
+end)
+
+-- ============================================================
+-- LOCK ON — FLOATING GUI (crosshair + indicator)
+-- ============================================================
+if player.PlayerGui:FindFirstChild("OrcaLockGui") then
+    player.PlayerGui.OrcaLockGui:Destroy()
+end
+
+local lockGui = Instance.new("ScreenGui")
+lockGui.Name           = "OrcaLockGui"
+lockGui.ResetOnSpawn   = false
+lockGui.IgnoreGuiInset = true
+lockGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+lockGui.Parent         = player.PlayerGui
+
+-- Mobile crosshair ring
+local ring = Instance.new("Frame", lockGui)
+ring.Size                   = UDim2.new(0, 64, 0, 64)
+ring.Position               = UDim2.new(0.85, -32, 0.75, -32)
+ring.BackgroundColor3       = Color3.fromRGB(8, 8, 8)
+ring.BackgroundTransparency = 0.3
+ring.BorderSizePixel        = 0
+ring.Active                 = true
+ring.ZIndex                 = 10
+ring.Visible                = false
+Instance.new("UICorner", ring).CornerRadius = UDim.new(1, 0)
+local ringStroke = Instance.new("UIStroke", ring)
+ringStroke.Color           = LockConfig.COLOR_IDLE
+ringStroke.Thickness       = 2.5
+ringStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local iconOuter = Instance.new("Frame", ring)
+iconOuter.Size                   = UDim2.new(0, 36, 0, 36)
+iconOuter.Position               = UDim2.new(0.5, -18, 0.5, -18)
+iconOuter.BackgroundTransparency = 1
+iconOuter.BorderSizePixel        = 0
+iconOuter.ZIndex                 = 11
+
+local function makeLine(parent, sizeX, sizeY, offX, offY)
+    local f = Instance.new("Frame", parent)
+    f.Size             = UDim2.new(0, sizeX, 0, sizeY)
+    f.Position         = UDim2.new(0.5, offX, 0.5, offY)
+    f.AnchorPoint      = Vector2.new(0.5, 0.5)
+    f.BackgroundColor3 = LockConfig.COLOR_IDLE
+    f.BorderSizePixel  = 0
+    f.ZIndex           = 12
+    Instance.new("UICorner", f).CornerRadius = UDim.new(1, 0)
+    return f
+end
+local lineH     = makeLine(iconOuter, 22, 2, 0, 0)
+local lineV     = makeLine(iconOuter, 2, 22, 0, 0)
+local centerDot = makeLine(iconOuter, 5, 5, 0, 0)
+
+local innerRing = Instance.new("Frame", iconOuter)
+innerRing.Size                   = UDim2.new(0, 14, 0, 14)
+innerRing.Position               = UDim2.new(0.5, -7, 0.5, -7)
+innerRing.BackgroundTransparency = 1
+innerRing.BorderSizePixel        = 0
+innerRing.ZIndex                 = 11
+Instance.new("UICorner", innerRing).CornerRadius = UDim.new(1, 0)
+local innerStroke = Instance.new("UIStroke", innerRing)
+innerStroke.Color     = LockConfig.COLOR_IDLE
+innerStroke.Thickness = 1.5
+
+local lockTrigger = Instance.new("TextButton", ring)
+lockTrigger.Size                   = UDim2.new(1, 0, 1, 0)
+lockTrigger.BackgroundTransparency = 1
+lockTrigger.Text                   = ""
+lockTrigger.ZIndex                 = 20
+
+-- PC indicator bar
+local pcIndicator = Instance.new("Frame", lockGui)
+pcIndicator.Size             = UDim2.new(0, 180, 0, 28)
+pcIndicator.Position         = UDim2.new(0.5, -90, 0, 10)
+pcIndicator.BackgroundColor3 = LockConfig.COLOR_UI_BG
+pcIndicator.BorderSizePixel  = 0
+pcIndicator.Visible          = false
+pcIndicator.ZIndex           = 24
+Instance.new("UICorner", pcIndicator).CornerRadius = UDim.new(0, 7)
+local pcStroke = Instance.new("UIStroke", pcIndicator)
+pcStroke.Color     = LockConfig.COLOR_IDLE
+pcStroke.Thickness = 1
+
+local pcLabel = Instance.new("TextLabel", pcIndicator)
+pcLabel.Size                   = UDim2.new(1, 0, 1, 0)
+pcLabel.BackgroundTransparency = 1
+pcLabel.Text                   = "  [Q]  Lock-On: OFF"
+pcLabel.TextColor3             = LockConfig.COLOR_IDLE
+pcLabel.TextSize               = 12
+pcLabel.Font                   = Enum.Font.GothamBold
+pcLabel.TextXAlignment         = Enum.TextXAlignment.Left
+pcLabel.ZIndex                 = 25
+
+-- ============================================================
+-- LOCK ON — UTILITY FUNCTIONS
+-- ============================================================
+local function setLockColor(col)
+    ringStroke.Color           = col
+    lineH.BackgroundColor3     = col
+    lineV.BackgroundColor3     = col
+    centerDot.BackgroundColor3 = col
+    innerStroke.Color          = col
+    pcStroke.Color             = col
+    pcLabel.TextColor3         = col
+end
+
+local function isTargetable(p)
+    if p == player then return false end
+    -- if no teams selected in dropdown, target everyone
+    if next(lockTeamFilter) == nil then return true end
+    local teamName = p.Team and p.Team.Name
+    if not teamName then return false end
+    return lockTeamFilter[teamName] == true
+end
+
+local function getLockPart(char)
+    return char:FindFirstChild(lockTargetPart)
+        or char:FindFirstChild("HumanoidRootPart")
+        or char:FindFirstChild("Head")
+end
+
+local function findLockTarget()
+    local myChar = player.Character
+    if not myChar then return nil end
+    local myRoot = myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    local center = Camera.ViewportSize / 2
+    local best, bestDist = nil, math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if not isTargetable(p) then continue end
+        local char = p.Character
+        if not char then continue end
+        local part = getLockPart(char)
+        local hum  = char:FindFirstChildOfClass("Humanoid")
+        if not part or not hum or hum.Health <= 0 then continue end
+        if (part.Position - myRoot.Position).Magnitude > LockConfig.LOCK_DISTANCE then continue end
+        local screenPos, onScreen = Camera:WorldToScreenPoint(part.Position)
+        if not onScreen then continue end
+        local dx, dy     = screenPos.X - center.X, screenPos.Y - center.Y
+        local screenDist = math.sqrt(dx*dx + dy*dy)
+        if screenDist > LockConfig.FOV_RADIUS then continue end
+        if screenDist < bestDist then bestDist = screenDist; best = part end
+    end
+    return best
+end
+
+local function validateLockTarget()
+    if not lockedTarget then return end
+    pcall(function()
+        local char   = lockedTarget.Parent
+        if not char or not char.Parent then locked = false; lockedTarget = nil; return end
+        local hum    = char:FindFirstChildOfClass("Humanoid")
+        local myChar = player.Character
+        local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+        if not hum or hum.Health <= 0 then locked = false; lockedTarget = nil; return end
+        if not myRoot then locked = false; lockedTarget = nil; return end
+        if (lockedTarget.Position - myRoot.Position).Magnitude > LockConfig.LOCK_DISTANCE then
+            locked = false; lockedTarget = nil; return
+        end
+        local owner = Players:GetPlayerFromCharacter(char)
+        if owner and not isTargetable(owner) then locked = false; lockedTarget = nil end
+    end)
+end
+
+local function doLockToggle()
+    if not lockEnabled then return end
+    if locked then
+        locked = false; lockedTarget = nil
+        setLockColor(LockConfig.COLOR_IDLE)
+        ring.BackgroundTransparency = 0.3
+        pcLabel.Text = "  [Q]  Lock-On: OFF"
+    else
+        local target = findLockTarget()
+        if target then
+            locked = true; lockedTarget = target
+            setLockColor(LockConfig.COLOR_LOCKED)
+            ring.BackgroundTransparency = 0.15
+            pcLabel.Text = "  [Q]  Lock-On: ON"
+        end
+    end
+end
+
+-- ============================================================
+-- LOCK ON — WindUI toggle drives ring/indicator visibility
+-- ============================================================
+-- Override the toggle callback to also show/hide GUI elements
+local _origLockToggle = LockToggle
+LockSection:Button({
+    Title    = "Reset Lock On",
+    Desc     = "Disable lock-on and clear current target.",
+    Callback = function()
+        lockEnabled  = false
+        locked       = false
+        lockedTarget = false
+        keybindEnabled = false
+        LockToggle:Set(false)
+        LockKeybindToggle:Set(false)
+        ring.Visible        = false
+        pcIndicator.Visible = false
+        setLockColor(LockConfig.COLOR_IDLE)
+        WindUI:Notify({
+            Title    = "🎯 Lock On Reset",
+            Content  = "Lock-On disabled and target cleared.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- Wire visibility into the master toggle after-the-fact via a second connection
+-- (WindUI fires the Callback we already set; we hook GUI side effects here)
+LockOnTab.Activated = LockOnTab.Activated -- no-op keep reference alive
+
+-- ============================================================
+-- LOCK ON — INPUT
+-- ============================================================
+
+-- Mobile crosshair tap
+lockTrigger.MouseButton1Click:Connect(doLockToggle)
+
+-- Show/hide ring based on lockEnabled (polled in render loop)
+-- PC keybind Q
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed then return end
+    if input.KeyCode == Enum.KeyCode.Q and keybindEnabled then
+        doLockToggle()
+    end
+end)
+
+-- Mobile ring drag
+local rdragging, rdragStart, rstartPos = false, nil, nil
+ring.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        rdragging = true; rdragStart = input.Position; rstartPos = ring.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then rdragging = false end
+        end)
+    end
+end)
+ring.InputChanged:Connect(function(input)
+    if not rdragging then return end
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+    or input.UserInputType == Enum.UserInputType.Touch then
+        local delta = input.Position - rdragStart
+        ring.Position = UDim2.new(
+            rstartPos.X.Scale, rstartPos.X.Offset + delta.X,
+            rstartPos.Y.Scale, rstartPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+-- ============================================================
+-- LOCK ON — RENDER LOOP
+-- ============================================================
+RunService.RenderStepped:Connect(function()
+    if not lockEnabled then
+        ring.Visible        = false
+        pcIndicator.Visible = false
+        setLockColor(LockConfig.COLOR_IDLE)
+        return
+    end
+
+    -- Show correct UI for platform
+    if isMobile then
+        ring.Visible        = true
+        pcIndicator.Visible = false
+    else
+        ring.Visible        = false
+        pcIndicator.Visible = keybindEnabled
+    end
+
+    validateLockTarget()
+
+    if locked and lockedTarget then
+        setLockColor(LockConfig.COLOR_LOCKED)
+        ring.BackgroundTransparency = 0.15
+        Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, lockedTarget.Position)
+        local alpha = (math.sin(tick() * 4) + 1) / 2
+        ringStroke.Thickness = 2.5 + alpha * 1.2
+        pcLabel.Text = "  [Q]  Lock-On: ON"
+    else
+        locked = false
+        setLockColor(LockConfig.COLOR_IDLE)
+        ring.BackgroundTransparency = 0.3
+        ringStroke.Thickness = 2.5
+        pcLabel.Text = "  [Q]  Lock-On: OFF"
+    end
+end)
+
+-- ============================================================
+-- TAB: Reach
+-- ============================================================
+local ReachTab = Window:Tab({
+    Title = "Reach",
+    Icon  = "move",
+})
+
+-- ============================================================
+-- REACH — STATE & CONFIG
+-- ============================================================
+local CBRING = {
+    Enabled       = false,
+    MaxDistance   = 25,
+    ForwardOffset = 3.5,
+}
+
+local reachTeamFilter    = {}   -- [teamName] = true; empty = all teams
+local reachHostileOnly   = false
+local reachCurrentTarget = nil
+local reachActiveJoints  = {}
+local reachModifiedTools = {}
+
+-- ============================================================
+-- REACH — CORE LOGIC
+-- ============================================================
+local function reachRestoreLimbs(p)
+    if reachModifiedTools[p] then
+        for part, original in pairs(reachModifiedTools[p]) do
+            if part and part.Parent then
+                part.CanCollide = original.CanCollide
+                part.CanTouch   = original.CanTouch
+            end
+        end
+        reachModifiedTools[p] = nil
+    end
+    if reachActiveJoints[p] then
+        local data = reachActiveJoints[p]
+        if data.LeftShoulder  and data.LeftShoulder.Parent  then data.LeftShoulder.Enabled  = true end
+        if data.RightShoulder and data.RightShoulder.Parent then data.RightShoulder.Enabled = true end
+        reachActiveJoints[p] = nil
+    end
+end
+
+local function reachIsTargetable(p)
+    if p == player then return false end
+    local char = p.Character
+    local hum  = char and char:FindFirstChildOfClass("Humanoid")
+    if not hum or hum.Health <= 0 then return false end
+    -- Hostile-only filter
+    if reachHostileOnly then
+        local PatientTeam2 = Teams:FindFirstChild("PATIENT")
+        if not PatientTeam2 then return false end
+        if p.Team ~= PatientTeam2 then return false end
+        if p:GetAttribute("IsTagged") ~= true then return false end
+    end
+    -- Team filter (empty = everyone)
+    if next(reachTeamFilter) ~= nil then
+        local teamName = p.Team and p.Team.Name
+        if not teamName then return false end
+        if not reachTeamFilter[teamName] then return false end
+    end
+    return true
+end
+
+local function reachGetClosest()
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    local best, bestDist = nil, CBRING.MaxDistance
+    for _, p in ipairs(Players:GetPlayers()) do
+        if not reachIsTargetable(p) then continue end
+        local char = p.Character
+        local root = char and char:FindFirstChild("HumanoidRootPart")
+        local hum  = char and char:FindFirstChildOfClass("Humanoid")
+        if root and hum and hum.Health > 0 then
+            local dist = (myRoot.Position - root.Position).Magnitude
+            if dist < bestDist then bestDist = dist; best = p end
+        end
+    end
+    return best
+end
+
+RunService.RenderStepped:Connect(function()
+    if not CBRING.Enabled then
+        if reachCurrentTarget then
+            reachRestoreLimbs(reachCurrentTarget)
+            reachCurrentTarget = nil
+        end
+        return
+    end
+
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return end
+
+    local targetPlayer = reachGetClosest()
+
+    if targetPlayer ~= reachCurrentTarget then
+        if reachCurrentTarget then reachRestoreLimbs(reachCurrentTarget) end
+        reachCurrentTarget = targetPlayer
+    end
+
+    if not targetPlayer then return end
+
+    local tChar     = targetPlayer.Character
+    local tHum      = tChar and tChar:FindFirstChildOfClass("Humanoid")
+    local tTorso    = tChar and tChar:FindFirstChild("Torso")
+    local tLeftArm  = tChar and tChar:FindFirstChild("Left Arm")
+    local tRightArm = tChar and tChar:FindFirstChild("Right Arm")
+
+    if tHum and tHum.Health > 0 and tTorso and tLeftArm and tRightArm then
+        local ls = tTorso:FindFirstChild("Left Shoulder")
+        local rs = tTorso:FindFirstChild("Right Shoulder")
+        if ls and rs then
+            if not reachActiveJoints[targetPlayer] then
+                reachActiveJoints[targetPlayer] = { LeftShoulder = ls, RightShoulder = rs }
+            end
+            ls.Enabled = false
+            rs.Enabled = false
+
+            if not reachModifiedTools[targetPlayer] then reachModifiedTools[targetPlayer] = {} end
+            local equippedTool = tChar:FindFirstChildOfClass("Tool")
+            if equippedTool then
+                for _, desc in ipairs(equippedTool:GetDescendants()) do
+                    if desc:IsA("BasePart") then
+                        if not reachModifiedTools[targetPlayer][desc] then
+                            reachModifiedTools[targetPlayer][desc] = {
+                                CanCollide = desc.CanCollide,
+                                CanTouch   = desc.CanTouch,
+                            }
+                        end
+                        desc.CanCollide = false
+                        desc.CanTouch   = false
+                    end
+                end
+            end
+
+            local targetCFrame = myRoot.CFrame * CFrame.new(0, 0, -CBRING.ForwardOffset)
+            tLeftArm.CFrame  = targetCFrame * CFrame.new(-0.6, 0, 0)
+            tRightArm.CFrame = targetCFrame * CFrame.new( 0.6, 0, 0)
+        end
+    else
+        reachRestoreLimbs(targetPlayer)
+        reachCurrentTarget = nil
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(p)
+    if p == reachCurrentTarget then
+        reachRestoreLimbs(p)
+        reachCurrentTarget = nil
+    end
+end)
+
+-- ============================================================
+-- REACH — WINDUI SECTIONS
+-- ============================================================
+
+-- ── Section: ⚔️ Reach Settings ───────────────────────────
+local ReachSection = ReachTab:Section({
+    Title  = "⚔️ Reach Settings",
+    Box    = false,
+    Opened = true,
+})
+
+local ReachToggle = ReachSection:Toggle({
+    Title    = "Enable Reach",
+    Desc     = "Pull the closest enemy's arms into your weapon range.",
+    Default  = false,
+    Callback = function(state)
+        CBRING.Enabled = state
+        if not state and reachCurrentTarget then
+            reachRestoreLimbs(reachCurrentTarget)
+            reachCurrentTarget = nil
+        end
+    end,
+})
+
+ReachSection:Input({
+    Title       = "Max Distance",
+    Desc        = "How close a target must be to get grabbed (default: 25).",
+    Placeholder = "Default: 25",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then CBRING.MaxDistance = num end
+    end,
+})
+
+ReachSection:Input({
+    Title       = "Forward Offset",
+    Desc        = "How far in front of you the arms float (default: 3.5, supports decimals).",
+    Placeholder = "Default: 3.5",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then CBRING.ForwardOffset = num end
+    end,
+})
+
+ReachSection:Button({
+    Title    = "Reset Reach",
+    Desc     = "Disable reach and restore all defaults.",
+    Callback = function()
+        CBRING.Enabled       = false
+        CBRING.MaxDistance   = 25
+        CBRING.ForwardOffset = 3.5
+        if reachCurrentTarget then
+            reachRestoreLimbs(reachCurrentTarget)
+            reachCurrentTarget = nil
+        end
+        ReachToggle:Set(false)
+        WindUI:Notify({
+            Title    = "⚔️ Reach Reset",
+            Content  = "Reach disabled and settings restored to default.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ── Section: 👥 Team Target ───────────────────────────────
+local ReachTeamSection = ReachTab:Section({
+    Title  = "👥 Team Target",
+    Box    = false,
+    Opened = true,
+})
+
+local function getReachTeamNames()
+    local names = {}
+    for _, t in ipairs(Teams:GetTeams()) do
+        table.insert(names, t.Name)
+    end
+    return names
+end
+
+local ReachTeamDropdown = ReachTeamSection:Dropdown({
+    Title     = "Target Teams",
+    Desc      = "Select teams to reach. Leave empty to target all players.",
+    Values    = getReachTeamNames(),
+    Value     = {},
+    Multi     = true,
+    AllowNone = true,
+    Callback  = function(selected)
+        reachTeamFilter = {}
+        if type(selected) == "table" then
+            for _, v in pairs(selected) do reachTeamFilter[v] = true end
+        elseif type(selected) == "string" and selected ~= "" then
+            reachTeamFilter[selected] = true
+        end
+        if reachCurrentTarget then
+            reachRestoreLimbs(reachCurrentTarget)
+            reachCurrentTarget = nil
+        end
+    end,
+})
+
+ReachTeamSection:Toggle({
+    Title    = "Target Hostiles Only",
+    Desc     = "Only reach players on the PATIENT team with the IsTagged attribute.",
+    Default  = false,
+    Callback = function(state)
+        reachHostileOnly = state
+        if reachCurrentTarget then
+            reachRestoreLimbs(reachCurrentTarget)
+            reachCurrentTarget = nil
+        end
+    end,
+})
+
+-- Refresh team dropdown when teams change
+Teams.ChildAdded:Connect(function(c)
+    if c:IsA("Team") then
+        task.wait(0.1)
+        ReachTeamDropdown:Refresh(getReachTeamNames(), {})
+    end
+end)
+Teams.ChildRemoved:Connect(function(c)
+    if c:IsA("Team") then
+        reachTeamFilter = {}
+        ReachTeamDropdown:Refresh(getReachTeamNames(), {})
+        if reachCurrentTarget then
+            reachRestoreLimbs(reachCurrentTarget)
+            reachCurrentTarget = nil
+        end
+    end
+end)
+
+-- ============================================================
+-- PLAYER TAB — INTERNAL STATE
+-- ============================================================
+
+-- Helpers to safely get character parts
+local function getHumanoid()
+    local char = player.Character
+    if not char then return nil end
+    return char:FindFirstChildOfClass("Humanoid")
+end
+
+local function getRootPart()
+    local char = player.Character
+    if not char then return nil end
+    return char:FindFirstChild("HumanoidRootPart")
+end
+
+-- ============================================================
+-- SECTION: 🏃‍♂️ WalkSpeed Modification
+-- ============================================================
+local WalkSection = PlayerTab:Section({
+    Title  = "🏃‍♂️ WalkSpeed Modification",
+    Box    = false,
+    Opened = true,
+})
+
+local walkEnabled      = false
+local currentWalkSpeed = 16
+
+local function applyWalkSpeed(speed)
+    local hum = getHumanoid()
+    if hum then hum.WalkSpeed = speed end
+end
+
+player.CharacterAdded:Connect(function(char)
+    local hum = char:WaitForChild("Humanoid")
+    if walkEnabled then hum.WalkSpeed = currentWalkSpeed end
+end)
+
+local WalkToggle = WalkSection:Toggle({
+    Title    = "Enable WalkSpeed Modifier",
+    Desc     = "Toggle custom WalkSpeed on or off.",
+    Default  = false,
+    Callback = function(state)
+        walkEnabled = state
+        if state then applyWalkSpeed(currentWalkSpeed) else applyWalkSpeed(16) end
+    end,
+})
+
+WalkSection:Input({
+    Title       = "WalkSpeed Value",
+    Desc        = "Enter your desired walk speed (default: 16, max: 150).",
+    Placeholder = "Default: 16",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num >= 1 and num <= 150 then
+            currentWalkSpeed = num
+            if walkEnabled then applyWalkSpeed(currentWalkSpeed) end
+        end
+    end,
+})
+
+WalkSection:Button({
+    Title    = "Reset WalkSpeed",
+    Desc     = "Restore WalkSpeed to default (16) and disable modifier.",
+    Callback = function()
+        walkEnabled      = false
+        currentWalkSpeed = 16
+        WalkToggle:Set(false)
+        applyWalkSpeed(16)
+        WindUI:Notify({
+            Title    = "🏃‍♂️ WalkSpeed Reset",
+            Content  = "WalkSpeed restored to default (16).",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SECTION: 🐇 JumpPower Modification (Jitter Jump)
+-- ============================================================
+local JumpSection = PlayerTab:Section({
+    Title  = "🐇 JumpPower Modification",
+    Box    = false,
+    Opened = true,
+})
+
+local jumpEnabled    = false
+local jumpStuds      = 25
+local jitterSteps    = 5
+local teleportDelay  = 0.01
+local ACTION_JUMP    = "OrcaHub_JitterJumpAction"
+
+local function doJitterJump(hum, root)
+    if not hum or not root then return end
+    if hum.FloorMaterial == Enum.Material.Air then return end
+    local stepDistance = jumpStuds / jitterSteps
+    for i = 1, jitterSteps do
+        root.CFrame = root.CFrame + Vector3.new(0, stepDistance, 0)
+        local shake = Vector3.new(math.random(-1,1)*0.2, 0, math.random(-1,1)*0.2)
+        root.CFrame = root.CFrame + shake
+        task.wait(teleportDelay)
+    end
+end
+
+local function bindJump()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hum  = char:WaitForChild("Humanoid")
+    local root = char:WaitForChild("HumanoidRootPart")
+    hum.JumpPower = 0
+
+    ContextActionService:BindAction(ACTION_JUMP, function(_, inputState, _)
+        if inputState == Enum.UserInputState.Begin then
+            doJitterJump(hum, root)
+        end
+    end, true, Enum.KeyCode.Space)
+
+    -- Style mobile button
+    local btn = ContextActionService:GetButton(ACTION_JUMP)
+    if btn then
+        btn.Size = UDim2.new(0, 100, 0, 100)
+        btn.Text = "🐇"
+        btn.TextSize = 45
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        btn.BackgroundTransparency = 0.4
+        local corner = btn:FindFirstChildOfClass("UICorner") or Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(1, 0)
+        corner.Parent = btn
+        local stroke = btn:FindFirstChildOfClass("UIStroke") or Instance.new("UIStroke")
+        stroke.Thickness = 2
+        stroke.Color = Color3.fromRGB(255, 255, 255)
+        stroke.Transparency = 0.3
+        stroke.Parent = btn
+    end
+end
+
+local function unbindJump()
+    ContextActionService:UnbindAction(ACTION_JUMP)
+    local hum = getHumanoid()
+    if hum then hum.JumpPower = 50 end -- restore Roblox default
+end
+
+-- Re-bind on respawn while toggle is ON
+player.CharacterAdded:Connect(function()
+    if jumpEnabled then
+        task.wait(0.1)
+        bindJump()
+    end
+end)
+
+local JumpToggle = JumpSection:Toggle({
+    Title    = "Enable JumpPower Modifier",
+    Desc     = "Toggle the jitter jump system on or off.",
+    Default  = false,
+    Callback = function(state)
+        jumpEnabled = state
+        if state then bindJump() else unbindJump() end
+    end,
+})
+
+JumpSection:Input({
+    Title       = "Jump Height (Studs)",
+    Desc        = "How high the jitter jump will go (default: 25).",
+    Placeholder = "Default: 25",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then
+            jumpStuds = num
+        end
+    end,
+})
+
+JumpSection:Input({
+    Title       = "Jitter Steps",
+    Desc        = "How many teleport steps make up the jump (default: 5).",
+    Placeholder = "Default: 5",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num >= 1 then
+            jitterSteps = math.floor(num)
+        end
+    end,
+})
+
+JumpSection:Button({
+    Title    = "Reset JumpPower",
+    Desc     = "Restore standard jump and disable modifier.",
+    Callback = function()
+        jumpEnabled = false
+        jumpStuds   = 25
+        jitterSteps = 5
+        JumpToggle:Set(false)
+        unbindJump()
+        WindUI:Notify({
+            Title    = "🐇 JumpPower Reset",
+            Content  = "JumpPower restored to default.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SECTION: 💠 Tpwalk Modification
+-- ============================================================
+local TpwalkSection = PlayerTab:Section({
+    Title  = "💠 Tpwalk Modification",
+    Box    = false,
+    Opened = true,
+})
+
+-- getgenv table for tpwalk state
+getgenv().OrcaTpwalk = getgenv().OrcaTpwalk or {}
+getgenv().OrcaTpwalk.Enabled = false
+getgenv().OrcaTpwalk.Speed   = 50
+
+local tpwalkEnabled = false
+local tpwalkSpeed   = 50
+
+-- Local character references (refreshed on respawn)
+local tpChar, tpHum, tpRoot, tpCamera
+
+local function refreshTpwalkRefs(char)
+    tpChar   = char
+    tpHum    = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid", 10)
+    tpRoot   = (tpHum and tpHum.RootPart) or char:WaitForChild("HumanoidRootPart", 10)
+    tpCamera = workspace.CurrentCamera
+end
+
+-- Initialise with current character
+local _initChar = player.Character
+if _initChar then refreshTpwalkRefs(_initChar) end
+
+player.CharacterAdded:Connect(function(newChar)
+    refreshTpwalkRefs(newChar)
+end)
+player.CharacterRemoving:Connect(function()
+    tpChar, tpHum, tpRoot = nil, nil, nil
+end)
+
+local function startTpwalk()
+    RunService:BindToRenderStep("OrcaTeleportWalk", Enum.RenderPriority.Camera.Value - 1, function(dt)
+        if not (tpChar and tpHum and tpRoot) then return end
+        local cam = workspace.CurrentCamera
+        local camCF   = cam.CFrame
+        local moveDirObj   = camCF:VectorToObjectSpace(tpHum:GetMoveVelocity())
+        local moveDirWorld = camCF:VectorToWorldSpace(moveDirObj)
+        tpRoot.CFrame = tpRoot.CFrame + moveDirWorld * dt * tpwalkSpeed
+    end)
+end
+
+local function stopTpwalk()
+    RunService:UnbindFromRenderStep("OrcaTeleportWalk")
+end
+
+player.CharacterAdded:Connect(function()
+    if tpwalkEnabled then
+        task.wait(0.1)
+        startTpwalk()
+    end
+end)
+
+local TpwalkToggle = TpwalkSection:Toggle({
+    Title    = "Enable Tpwalk",
+    Desc     = "Toggle teleport-walk movement on or off.",
+    Default  = false,
+    Callback = function(state)
+        tpwalkEnabled = state
+        getgenv().OrcaTpwalk.Enabled = state
+        if state then startTpwalk() else stopTpwalk() end
+    end,
+})
+
+-- Input box for decimal-friendly speed (supports 0.1, 0.5, etc.)
+TpwalkSection:Input({
+    Title       = "Tpwalk Speed",
+    Desc        = "Enter a speed value (supports decimals like 0.5, 1.2, 50).",
+    Placeholder = "Default: 50",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then
+            tpwalkSpeed = num
+            getgenv().OrcaTpwalk.Speed = num
+        end
+    end,
+})
+
+TpwalkSection:Button({
+    Title    = "Reset Tpwalk",
+    Desc     = "Disable Tpwalk and restore speed to default (50).",
+    Callback = function()
+        tpwalkEnabled = false
+        tpwalkSpeed   = 50
+        getgenv().OrcaTpwalk.Enabled = false
+        getgenv().OrcaTpwalk.Speed   = 50
+        TpwalkToggle:Set(false)
+        stopTpwalk()
+        WindUI:Notify({
+            Title    = "💠 Tpwalk Reset",
+            Content  = "Tpwalk disabled, speed restored to 50.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SECTION: 🔧 Movement
+-- ============================================================
+local MovementSection = PlayerTab:Section({
+    Title  = "🔧 Movement",
+    Box    = false,
+    Opened = true,
+})
+
+-- ── Noclip ────────────────────────────────────────────────
+local noclipEnabled    = false
+local noclipConnection = nil
+local floatName        = "OrcaHub_FloatPlatform"
+
+local function enableNoclip()
+    noclipConnection = RunService.Stepped:Connect(function()
+        if not noclipEnabled then return end
+        local char = player.Character
+        if not char then return end
+        for _, v in pairs(char:GetDescendants()) do
+            if v:IsA("BasePart") and v.CanCollide and v.Name ~= floatName then
+                v.CanCollide = false
+            end
+        end
+    end)
+end
+
+local function disableNoclip()
+    if noclipConnection then
+        noclipConnection:Disconnect()
+        noclipConnection = nil
+    end
+    -- Restore collision
+    local char = player.Character
+    if char then
+        for _, v in pairs(char:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.CanCollide = true
+            end
+        end
+    end
+end
+
+MovementSection:Toggle({
+    Title    = "Noclip",
+    Desc     = "Walk through walls and terrain.",
+    Default  = false,
+    Callback = function(state)
+        noclipEnabled = state
+        if state then
+            enableNoclip()
+        else
+            disableNoclip()
+        end
+    end,
+})
+
+-- ── Infinite Jump ─────────────────────────────────────────
+local infiniteJumpEnabled  = false
+local infiniteJumpConn     = nil
+
+MovementSection:Toggle({
+    Title    = "Infinite Jump",
+    Desc     = "Jump again in mid-air as many times as you want.",
+    Default  = false,
+    Callback = function(state)
+        infiniteJumpEnabled = state
+        if state and not infiniteJumpConn then
+            infiniteJumpConn = UserInputService.JumpRequest:Connect(function()
+                if infiniteJumpEnabled then
+                    local char = player.Character
+                    if char then
+                        local hum = char:FindFirstChildOfClass("Humanoid")
+                        if hum then
+                            hum:ChangeState(Enum.HumanoidStateType.Jumping)
+                        end
+                    end
+                end
+            end)
+        elseif not state and infiniteJumpConn then
+            infiniteJumpConn:Disconnect()
+            infiniteJumpConn = nil
+        end
+    end,
+})
+
+-- ── Float ─────────────────────────────────────────────────
+local floatEnabled     = false
+local floatConnection  = nil
+local floatPlatform    = nil
+
+local function createFloatPlatform()
+    -- Clean up any stale instance first
+    if workspace:FindFirstChild(floatName) then
+        workspace[floatName]:Destroy()
+    end
+
+    floatPlatform             = Instance.new("Part")
+    floatPlatform.Name        = floatName
+    floatPlatform.Size        = Vector3.new(10, 0.5, 10)
+    floatPlatform.Color       = Color3.fromRGB(0, 255, 255)
+    floatPlatform.Transparency = 0.85
+    floatPlatform.Material    = Enum.Material.ForceField
+    floatPlatform.Anchored    = true
+    floatPlatform.CanCollide  = true
+    floatPlatform.Parent      = workspace
+    return floatPlatform
+end
+
+local function destroyFloatPlatform()
+    if floatPlatform then
+        floatPlatform:Destroy()
+        floatPlatform = nil
+    end
+    if workspace:FindFirstChild(floatName) then
+        workspace[floatName]:Destroy()
+    end
+end
+
+local function enableFloat()
+    local char  = player.Character or player.CharacterAdded:Wait()
+    local root  = char:WaitForChild("HumanoidRootPart")
+    local hum   = char:WaitForChild("Humanoid")
+    local platform = createFloatPlatform()
+    local currentFloatHeight = root.Position.Y - 3.25
+
+    floatConnection = RunService.RenderStepped:Connect(function()
+        if not floatEnabled then return end
+        if not (char and root and hum) then return end
+        local velY = root.AssemblyLinearVelocity.Y
+        if velY > 0.1 then
+            currentFloatHeight = root.Position.Y - 3.25
+        end
+        platform.CFrame = CFrame.new(root.Position.X, currentFloatHeight, root.Position.Z)
+    end)
+end
+
+local function disableFloat()
+    if floatConnection then
+        floatConnection:Disconnect()
+        floatConnection = nil
+    end
+    destroyFloatPlatform()
+end
+
+-- Re-init float on respawn if toggle is still on
+player.CharacterAdded:Connect(function(newChar)
+    if floatEnabled then
+        task.wait(0.1)
+        enableFloat()
+    end
+end)
+
+MovementSection:Toggle({
+    Title    = "Float",
+    Desc     = "Summon a transparent platform beneath you that keeps you floating.",
+    Default  = false,
+    Callback = function(state)
+        floatEnabled = state
+        if state then
+            enableFloat()
+        else
+            disableFloat()
+        end
+    end,
+})
+
+-- ============================================================
+-- TAB SECTION: Teams
+-- ============================================================
+Window:Section({
+    Title  = "Teams",
+    Opened = true,
+})
+
+-- ============================================================
+-- TAB: Patient
+-- ============================================================
+local PatientTab = Window:Tab({
+    Title = "Patient",
+    Icon  = "user",
+})
+
+-- ============================================================
+-- ============================================================
+-- TAB: Orderly/EPU
+-- ============================================================
+local OrderlyTab = Window:Tab({
+    Title = "Orderly/EPU",
+    Icon  = "shield",
+})
+
+-- ============================================================
+-- ORDERLY — SHARED PATIENT TEAM REF
+-- ============================================================
+local OrdPatientTeam = Teams:FindFirstChild("PATIENT")
+if not OrdPatientTeam then
+    Teams.ChildAdded:Connect(function(c)
+        if c:IsA("Team") and c.Name == "PATIENT" then OrdPatientTeam = c end
+    end)
+end
+
+-- ============================================================
+-- SECTION: 🔫 Taser Silent Aim
+-- ============================================================
+local TaserSection = OrderlyTab:Section({
+    Title  = "🔫 Taser Silent Aim",
+    Box    = false,
+    Opened = true,
+})
+
+local TASER_SA = {
+    Enabled    = false,
+    TargetPart = "HumanoidRootPart",
+    MaxDistance = 300,
+}
+
+local function taserIsHostile(p)
+    if not p or p == player then return false end
+    if not OrdPatientTeam then return false end
+    if p.Team ~= OrdPatientTeam then return false end
+    if p:GetAttribute("IsTagged") ~= true then return false end
+    local char = p.Character
+    local hum  = char and char:FindFirstChildOfClass("Humanoid")
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    local part = char and char:FindFirstChild(TASER_SA.TargetPart)
+    if not hum or hum.Health <= 0 or not root or not part then return false end
+    return true
+end
+
+local function taserGetClosest()
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    local best, bestDist = nil, TASER_SA.MaxDistance
+    for _, p in ipairs(Players:GetPlayers()) do
+        if taserIsHostile(p) then
+            local char = p.Character
+            local part = char:FindFirstChild(TASER_SA.TargetPart)
+            if part then
+                local dist = (myRoot.Position - char.HumanoidRootPart.Position).Magnitude
+                if dist < bestDist then bestDist = dist; best = part end
+            end
+        end
+    end
+    return best
+end
+
+-- Hook GetMouseHit and Mouse.Hit metamethod
+local taserOldGetMouseHit = nil
+local taserHooked = false
+
+local function taserHook()
+    if taserHooked then return end
+    taserHooked = true
+    local ok = pcall(function()
+        taserOldGetMouseHit = hookfunction(UserInputService.GetMouseHit, function(self, ...)
+            if TASER_SA.Enabled then
+                local part = taserGetClosest()
+                if part then return CFrame.new(part.Position) end
+            end
+            return taserOldGetMouseHit(self, ...)
+        end)
+    end)
+    if not ok then
+        local rawMeta = getrawmetatable(game)
+        if rawMeta and rawMeta.__index then
+            local oldIndex = rawMeta.__index
+            if setreadonly then setreadonly(rawMeta, false) end
+            rawMeta.__index = newcclosure(function(self, key)
+                if TASER_SA.Enabled and (key == "Hit" or key == "hit") and self:IsA("Mouse") then
+                    local part = taserGetClosest()
+                    if part then return CFrame.new(part.Position) end
+                end
+                return oldIndex(self, key)
+            end)
+            if setreadonly then setreadonly(rawMeta, true) end
+        end
+    end
+end
+
+-- WindUI elements
+TaserSection:Toggle({
+    Title    = "Enable Taser Silent Aim",
+    Desc     = "Silently redirect taser shots to the closest hostile PATIENT.",
+    Default  = false,
+    Callback = function(state)
+        TASER_SA.Enabled = state
+        if state then taserHook() end
+    end,
+})
+
+TaserSection:Dropdown({
+    Title     = "Target Part",
+    Desc      = "Which part of the hostile to aim at.",
+    Values    = { "HumanoidRootPart", "Head" },
+    Value     = { "HumanoidRootPart" },
+    Multi     = false,
+    AllowNone = false,
+    Callback  = function(v) TASER_SA.TargetPart = v end,
+})
+
+TaserSection:Input({
+    Title       = "Max Distance",
+    Desc        = "Maximum range to acquire a target (default: 300).",
+    Placeholder = "Default: 300",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then TASER_SA.MaxDistance = n end
+    end,
+})
+
+-- ============================================================
+-- SECTION: 🌶 Peppergun Silent Aim
+-- ============================================================
+local PepperSection = OrderlyTab:Section({
+    Title  = "🌶 Peppergun Silent Aim",
+    Box    = false,
+    Opened = true,
+})
+
+local PEPPER_SA = {
+    Enabled     = false,
+    TargetPart  = "HumanoidRootPart",
+    MaxDistance = 300,
+}
+
+local function pepperIsHostile(p)
+    if not p or p == player then return false end
+    if not OrdPatientTeam then return false end
+    if p.Team ~= OrdPatientTeam then return false end
+    if p:GetAttribute("IsTagged") ~= true then return false end
+    local char = p.Character
+    local hum  = char and char:FindFirstChildOfClass("Humanoid")
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    local part = char and char:FindFirstChild(PEPPER_SA.TargetPart)
+    if not hum or hum.Health <= 0 or not root or not part then return false end
+    return true
+end
+
+local function pepperGetClosest()
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    local best, bestDist = nil, PEPPER_SA.MaxDistance
+    for _, p in ipairs(Players:GetPlayers()) do
+        if pepperIsHostile(p) then
+            local char = p.Character
+            local part = char:FindFirstChild(PEPPER_SA.TargetPart)
+            if part then
+                local dist = (myRoot.Position - char.HumanoidRootPart.Position).Magnitude
+                if dist < bestDist then bestDist = dist; best = part end
+            end
+        end
+    end
+    return best
+end
+
+local pepperHooked = false
+local pepperOldGetMouseHit = nil
+
+local function pepperHook()
+    if pepperHooked then return end
+    pepperHooked = true
+    -- Framework module interception (Peppergun exclusive)
+    task.spawn(function()
+        local serviceFolder = ReplicatedStorage:WaitForChild("Service", 10)
+        if serviceFolder then
+            local customUISModule = serviceFolder:WaitForChild("UserInputService", 5)
+            if customUISModule then
+                local customUIS = require(customUISModule)
+                if customUIS and customUIS.GetMouseHit then
+                    local oldCustom = customUIS.GetMouseHit
+                    customUIS.GetMouseHit = function(...)
+                        if PEPPER_SA.Enabled then
+                            local part = pepperGetClosest()
+                            if part then return CFrame.new(part.Position) end
+                        end
+                        return oldCustom(...)
+                    end
+                end
+            end
+        end
+    end)
+    -- Fallback: hook engine
+    local ok = pcall(function()
+        pepperOldGetMouseHit = hookfunction(UserInputService.GetMouseHit, function(self, ...)
+            if PEPPER_SA.Enabled then
+                local part = pepperGetClosest()
+                if part then return CFrame.new(part.Position) end
+            end
+            return pepperOldGetMouseHit(self, ...)
+        end)
+    end)
+    if not ok then
+        local rawMeta = getrawmetatable(game)
+        if rawMeta and rawMeta.__index then
+            local oldIndex = rawMeta.__index
+            if setreadonly then setreadonly(rawMeta, false) end
+            rawMeta.__index = newcclosure(function(self, key)
+                if PEPPER_SA.Enabled and (key == "Hit" or key == "hit") and self:IsA("Mouse") then
+                    local part = pepperGetClosest()
+                    if part then return CFrame.new(part.Position) end
+                end
+                return oldIndex(self, key)
+            end)
+            if setreadonly then setreadonly(rawMeta, true) end
+        end
+    end
+end
+
+-- WindUI elements
+PepperSection:Toggle({
+    Title    = "Enable Peppergun Silent Aim",
+    Desc     = "Silently redirect peppergun shots to the closest hostile PATIENT.",
+    Default  = false,
+    Callback = function(state)
+        PEPPER_SA.Enabled = state
+        if state then pepperHook() end
+    end,
+})
+
+PepperSection:Dropdown({
+    Title     = "Target Part",
+    Desc      = "Which part of the hostile to aim at.",
+    Values    = { "HumanoidRootPart", "Head" },
+    Value     = { "HumanoidRootPart" },
+    Multi     = false,
+    AllowNone = false,
+    Callback  = function(v) PEPPER_SA.TargetPart = v end,
+})
+
+PepperSection:Input({
+    Title       = "Max Distance",
+    Desc        = "Maximum range to acquire a target (default: 300).",
+    Placeholder = "Default: 300",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then PEPPER_SA.MaxDistance = n end
+    end,
+})
+
+-- ============================================================
+-- SECTION: 🔗 Arrest Aura
+-- ============================================================
+local ArrestSection = OrderlyTab:Section({
+    Title  = "🔗 Arrest Aura",
+    Box    = false,
+    Opened = true,
+})
+
+local ARREST = {
+    Enabled     = false,
+    MaxDistance = 6.8,
+    CheckDelay  = 0.1,
+}
+
+local arrestLoop   = false
+local arrestRemote = nil
+pcall(function()
+    arrestRemote = ReplicatedStorage:WaitForChild("Remote", 5)
+        and ReplicatedStorage.Remote:WaitForChild("Detainment", 5)
+end)
+
+local function arrestGetTarget()
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p == player then continue end
+        local teamName = tostring(p.Team)
+        if (teamName == "BOXED" or (teamName == "PATIENT" and p:GetAttribute("IsTagged"))) and p.Character then
+            local ready = false
+            if teamName == "BOXED" then
+                ready = true
+            else
+                if p:GetAttribute("BoxTrapped") and p.Character:GetAttribute("Stunned") then
+                    ready = true
+                end
+            end
+            if ready then
+                local tRoot = p.Character:FindFirstChild("HumanoidRootPart")
+                if tRoot and (myRoot.Position - tRoot.Position).Magnitude < ARREST.MaxDistance then
+                    return p
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local ArrestToggle = ArrestSection:Toggle({
+    Title    = "Enable Arrest Aura",
+    Desc     = "Automatically arrest BOXED or stunned hostile PATIENT players in range.",
+    Default  = false,
+    Callback = function(state)
+        ARREST.Enabled = state
+        if state and not arrestLoop then
+            arrestLoop = true
+            task.spawn(function()
+                while ARREST.Enabled do
+                    task.wait(ARREST.CheckDelay)
+                    if not ARREST.Enabled then break end
+                    local target = arrestGetTarget()
+                    if target and arrestRemote then
+                        local char   = player.Character
+                        local hum    = char and char:FindFirstChildOfClass("Humanoid")
+                        local backpack = player:FindFirstChildOfClass("Backpack")
+                        if hum and backpack then
+                            local tool = backpack:FindFirstChild("Box")
+                                or char:FindFirstChild("Box")
+                                or backpack:FindFirstChild("Handcuffs")
+                                or char:FindFirstChild("Handcuffs")
+                            if tool then
+                                if tool.Parent == backpack then
+                                    hum:EquipTool(tool)
+                                    task.wait()
+                                end
+                                arrestRemote:FireServer(target)
+                                task.wait(0.05)
+                                if tool.Parent == char then hum:UnequipTools() end
+                                task.wait(0.3)
+                            end
+                        end
+                    end
+                end
+                arrestLoop = false
+            end)
+        end
+    end,
+})
+
+ArrestSection:Input({
+    Title       = "Max Distance",
+    Desc        = "Range in studs to auto-arrest (default: 6.8, server limit ~7).",
+    Placeholder = "Default: 6.8",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then ARREST.MaxDistance = n end
+    end,
+})
+
+ArrestSection:Input({
+    Title       = "Check Delay",
+    Desc        = "Seconds between each scan for arrest targets (default: 0.1).",
+    Placeholder = "Default: 0.1",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then ARREST.CheckDelay = n end
+    end,
+})
+
+ArrestSection:Button({
+    Title    = "Reset Arrest Aura",
+    Desc     = "Disable arrest aura and restore settings to default.",
+    Callback = function()
+        ARREST.Enabled     = false
+        ARREST.MaxDistance = 6.8
+        ARREST.CheckDelay  = 0.1
+        ArrestToggle:Set(false)
+        WindUI:Notify({
+            Title    = "🔗 Arrest Aura Reset",
+            Content  = "Arrest Aura disabled and settings restored.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- ============================================================
+-- TAB: Medical
+-- ============================================================
+local MedicalTab = Window:Tab({
+    Title = "Medical",
+    Icon  = "heart",
+})
+
+-- ============================================================
+-- SECTION: 💊 Healing Aura
+-- ============================================================
+local HealSection = MedicalTab:Section({
+    Title  = "💊 Healing Aura",
+    Box    = false,
+    Opened = true,
+})
+
+local HEAL = {
+    Enabled        = false,
+    MaxDistance    = 5.8,
+    ScanDelay      = 0.05,
+    PostHealDelay  = 0.1,
+}
+
+local healTeamFilter = {}   -- [teamName] = true; empty = all teams
+
+local MEDICAL_TOOLS = { "Large Medical Kit", "Medical Kit", "Quick-Fix" }
+
+local healRemote   = nil
+local healCharsFolder = nil
+pcall(function()
+    healRemote      = ReplicatedStorage:WaitForChild("Remote", 5)
+        and ReplicatedStorage.Remote:WaitForChild("AttemptHeal", 5)
+    healCharsFolder = workspace:WaitForChild("Characters", 5)
+end)
+
+local function healIsTeamAllowed(p)
+    if next(healTeamFilter) == nil then return true end  -- empty = everyone
+    local teamName = p.Team and p.Team.Name
+    if not teamName then return false end
+    return healTeamFilter[teamName] == true
+end
+
+local function healGetTarget()
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot or not healCharsFolder then return nil end
+    local best, bestDist = nil, HEAL.MaxDistance
+    for _, charModel in ipairs(healCharsFolder:GetChildren()) do
+        if charModel == myChar then continue end
+        local hum = charModel:FindFirstChildOfClass("Humanoid")
+        if hum and hum.Health > 0 and hum.Health < hum.MaxHealth then
+            local tRoot = charModel:FindFirstChild("HumanoidRootPart")
+            if tRoot then
+                local dist = (myRoot.Position - tRoot.Position).Magnitude
+                if dist < bestDist then
+                    local tp = Players:GetPlayerFromCharacter(charModel)
+                    if tp and healIsTeamAllowed(tp) then
+                        best = tp; bestDist = dist
+                    end
+                end
+            end
+        end
+    end
+    return best
+end
+
+local function healGetTool(backpack, char)
+    local now = workspace:GetServerTimeNow()
+    for _, name in ipairs(MEDICAL_TOOLS) do
+        local t = backpack:FindFirstChild(name) or char:FindFirstChild(name)
+        if t then
+            local ready    = t:GetAttribute("Ready")
+            local cooldown = t:GetAttribute("Cooldown") or 0
+            if ready ~= false and now >= cooldown then return t end
+        end
+    end
+    -- fallback — return any tool found
+    for _, name in ipairs(MEDICAL_TOOLS) do
+        local t = backpack:FindFirstChild(name) or char:FindFirstChild(name)
+        if t then return t end
+    end
+    return nil
+end
+
+local healLoopRunning = false
+
+local HealToggle = HealSection:Toggle({
+    Title    = "Enable Healing Aura",
+    Desc     = "Automatically heal nearby injured players using your medical tools.",
+    Default  = false,
+    Callback = function(state)
+        HEAL.Enabled = state
+        if state and not healLoopRunning then
+            healLoopRunning = true
+            task.spawn(function()
+                while HEAL.Enabled do
+                    task.wait(HEAL.ScanDelay)
+                    if not HEAL.Enabled then break end
+                    local target = healGetTarget()
+                    if target and healRemote then
+                        local char     = player.Character
+                        local hum      = char and char:FindFirstChildOfClass("Humanoid")
+                        local backpack = player:FindFirstChildOfClass("Backpack")
+                        if hum and backpack then
+                            local tool = healGetTool(backpack, char)
+                            if tool then
+                                if tool.Parent == backpack then
+                                    hum:EquipTool(tool)
+                                    task.wait()
+                                end
+                                healRemote:FireServer(target)
+                                task.wait(0.05)
+                                if tool.Parent == char then hum:UnequipTools() end
+                                task.wait(HEAL.PostHealDelay)
+                            end
+                        end
+                    end
+                end
+                healLoopRunning = false
+            end)
+        end
+    end,
+})
+
+-- Team filter dropdown
+local function getHealTeamNames()
+    local names = {}
+    for _, t in ipairs(Teams:GetTeams()) do
+        table.insert(names, t.Name)
+    end
+    return names
+end
+
+local HealTeamDropdown = HealSection:Dropdown({
+    Title     = "Target Teams",
+    Desc      = "Heal only players from selected teams. Leave empty to heal everyone.",
+    Values    = getHealTeamNames(),
+    Value     = {},
+    Multi     = true,
+    AllowNone = true,
+    Callback  = function(selected)
+        healTeamFilter = {}
+        if type(selected) == "table" then
+            for _, v in pairs(selected) do healTeamFilter[v] = true end
+        elseif type(selected) == "string" and selected ~= "" then
+            healTeamFilter[selected] = true
+        end
+    end,
+})
+
+Teams.ChildAdded:Connect(function(c)
+    if c:IsA("Team") then
+        task.wait(0.1)
+        HealTeamDropdown:Refresh(getHealTeamNames(), {})
+    end
+end)
+Teams.ChildRemoved:Connect(function(c)
+    if c:IsA("Team") then
+        healTeamFilter = {}
+        HealTeamDropdown:Refresh(getHealTeamNames(), {})
+    end
+end)
+
+HealSection:Input({
+    Title       = "Max Distance",
+    Desc        = "Heal range in studs (default: 5.8, server limit ~6).",
+    Placeholder = "Default: 5.8",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then HEAL.MaxDistance = n end
+    end,
+})
+
+HealSection:Input({
+    Title       = "Scan Delay",
+    Desc        = "Seconds between each scan for injured players (default: 0.05).",
+    Placeholder = "Default: 0.05",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then HEAL.ScanDelay = n end
+    end,
+})
+
+HealSection:Input({
+    Title       = "Post-Heal Delay",
+    Desc        = "Cooldown after each heal before scanning again (default: 0.1).",
+    Placeholder = "Default: 0.1",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then HEAL.PostHealDelay = n end
+    end,
+})
+
+HealSection:Button({
+    Title    = "Reset Healing Aura",
+    Desc     = "Disable healing aura and restore all settings to default.",
+    Callback = function()
+        HEAL.Enabled       = false
+        HEAL.MaxDistance   = 5.8
+        HEAL.ScanDelay     = 0.05
+        HEAL.PostHealDelay = 0.1
+        healTeamFilter     = {}
+        HealToggle:Set(false)
+        HealTeamDropdown:Refresh(getHealTeamNames(), {})
+        WindUI:Notify({
+            Title    = "💊 Healing Aura Reset",
+            Content  = "Healing Aura disabled and settings restored.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SHARED SERVICES for Patient tab
+-- ============================================================
+local HttpService     = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- ============================================================
+-- SECTION: 💨 Auto Escape (Normal)
+-- ============================================================
+local EscapeNormalSection = PatientTab:Section({
+    Title  = "💨 Auto Escape (Normal)",
+    Box    = false,
+    Opened = true,
+})
+
+-- ── Config ───────────────────────────────────────────────
+local EN = {
+    Enabled      = false,
+    PLACE_ID     = 132352755769957,
+    BOXED_TEAM   = "Boxed",
+    STEP_SIZE    = 1.4,
+    STEP_WAIT    = 0.03,
+    ARRIVE_DIST  = 4,
+    DEATH_RESTART = 5,
+}
+
+local EN_WAYPOINTS = {
+    Vector3.new(223,251,-552), Vector3.new(193,251,-553),
+    Vector3.new(163,251,-550), Vector3.new(126,249,-549),
+    Vector3.new(99,249,-547),  Vector3.new(100,249,-520),
+    Vector3.new(104,250,-435), Vector3.new(51,251,-432),
+    Vector3.new(49,251,-391),  Vector3.new(155,269,-391),
+    Vector3.new(155,269,-422), Vector3.new(61,287,-422),
+    Vector3.new(-11,287,-422), Vector3.new(-78,287,-421),
+    Vector3.new(-77,287,-387), Vector3.new(-76,298,-375),
+    Vector3.new(-77,318,-403), Vector3.new(-77,338,-374),
+    Vector3.new(-78,358,-402), Vector3.new(-77,378,-375),
+    Vector3.new(-77,398,-403), Vector3.new(-77,418,-374),
+    Vector3.new(-77,438,-402), Vector3.new(-77,458,-375),
+    Vector3.new(-77,478,-401), Vector3.new(-76,498,-374),
+    Vector3.new(-78,518,-402), Vector3.new(-77,518,-366),
+    Vector3.new(-76,518,-336), Vector3.new(0,518,-337),
+    Vector3.new(0,518,-195),   Vector3.new(45,518,-196),
+    Vector3.new(43,518,-174),  Vector3.new(1,518,-175),
+    Vector3.new(1,518,-116),   Vector3.new(1,517,-39),
+    Vector3.new(1,517,421)
+}
+
+-- ── State ────────────────────────────────────────────────
+local enRunning    = false
+local enNoclipConn = nil
+local enPlatform   = nil
+local enThread     = nil
+
+-- ── Helpers ──────────────────────────────────────────────
+local function enIsBoxed()
+    return player.Team and player.Team.Name == EN.BOXED_TEAM
+end
+
+local function enServerHop()
+    local ok, result = pcall(function()
+        return game:HttpGet(
+            "https://games.roblox.com/v1/games/"..EN.PLACE_ID..
+            "/servers/Public?sortOrder=Asc&limit=100"
+        )
+    end)
+    if ok then
+        local parsed = HttpService:JSONDecode(result)
+        local servers = {}
+        for _, v in pairs(parsed.data) do
+            if v.playing < v.maxPlayers and v.id ~= game.JobId then
+                table.insert(servers, v.id)
+            end
+        end
+        if #servers > 0 then
+            TeleportService:TeleportToPlaceInstance(EN.PLACE_ID, servers[math.random(1, #servers)])
+        else
+            TeleportService:Teleport(EN.PLACE_ID)
+        end
+    else
+        pcall(function() TeleportService:Teleport(EN.PLACE_ID) end)
+    end
+end
+
+local function enCleanup(hum, prevWalk, prevJump)
+    if enNoclipConn then enNoclipConn:Disconnect(); enNoclipConn = nil end
+    if enPlatform   then pcall(function() enPlatform:Destroy() end); enPlatform = nil end
+    if hum and hum.Parent then
+        hum.WalkSpeed = prevWalk or 16
+        hum.JumpPower = prevJump or 50
+    end
+    local char = player.Character
+    if char then
+        for _, v in ipairs(char:GetDescendants()) do
+            if v:IsA("BasePart") then pcall(function() v.CanCollide = true end) end
+        end
+    end
+end
+
+local function enStop()
+    enRunning = false
+    enCleanup(nil, nil, nil)
+end
+
+local function enStart()
+    enRunning = true
+    enThread  = task.spawn(function()
+        while enRunning do
+            if enIsBoxed() then
+                task.wait(10); continue
+            end
+
+            local char = player.Character or player.CharacterAdded:Wait()
+            local root = char:WaitForChild("HumanoidRootPart", 5)
+            local hum  = char:FindFirstChildOfClass("Humanoid")
+            if not root or not hum then task.wait(1); continue end
+
+            if enNoclipConn then enNoclipConn:Disconnect() end
+            enNoclipConn = RunService.Stepped:Connect(function()
+                local c = player.Character
+                if not c then return end
+                for _, v in ipairs(c:GetDescendants()) do
+                    if v:IsA("BasePart") then pcall(function() v.CanCollide = false end) end
+                end
+            end)
+
+            if enPlatform then pcall(function() enPlatform:Destroy() end) end
+            enPlatform              = Instance.new("Part")
+            enPlatform.Size         = Vector3.new(15, 1, 15)
+            enPlatform.Anchored     = true
+            enPlatform.Transparency = 1
+            enPlatform.CanCollide   = true
+            enPlatform.Name         = "EscapePlatformNormal"
+            enPlatform.Parent       = workspace
+
+            local prevWalk = hum.WalkSpeed
+            local prevJump = hum.JumpPower
+            hum.WalkSpeed  = 0
+            hum.JumpPower  = 0
+
+            local died = false
+            for i = 1, #EN_WAYPOINTS do
+                if not enRunning then break end
+                local wp = EN_WAYPOINTS[i]
+                while enRunning do
+                    if hum.Health <= 0 or not root.Parent then died = true; break end
+                    local pos = root.Position
+                    if (Vector2.new(pos.X, pos.Z) - Vector2.new(wp.X, wp.Z)).Magnitude <= EN.ARRIVE_DIST then
+                        root.CFrame = CFrame.new(wp)
+                        if enPlatform and enPlatform.Parent then
+                            enPlatform.CFrame = root.CFrame * CFrame.new(0, -3.5, 0)
+                        end
+                        task.wait(0.04); break
+                    end
+                    local dir  = (wp - pos).Unit
+                    local step = math.min(EN.STEP_SIZE, (wp - pos).Magnitude)
+                    root.CFrame = CFrame.new(pos + dir * step) * (root.CFrame - root.CFrame.Position)
+                    if enPlatform and enPlatform.Parent then
+                        enPlatform.CFrame = root.CFrame * CFrame.new(0, -3.5, 0)
+                    end
+                    task.wait(EN.STEP_WAIT)
+                end
+                if died then break end
+            end
+
+            enCleanup(hum, prevWalk, prevJump)
+
+            if not enRunning then break end
+            if died then
+                task.wait(EN.DEATH_RESTART)
+            else
+                enServerHop(); break
+            end
+        end
+    end)
+end
+
+-- ── WindUI Elements ──────────────────────────────────────
+local ENToggle = EscapeNormalSection:Toggle({
+    Title    = "Enable Auto Escape (Normal)",
+    Desc     = "Automatically navigate the normal escape route and server hop on completion.",
+    Default  = false,
+    Callback = function(state)
+        if state then enStart() else enStop() end
+    end,
+})
+
+EscapeNormalSection:Input({
+    Title       = "Step Size",
+    Desc        = "Studs moved per tick toward each waypoint (default: 1.4).",
+    Placeholder = "Default: 1.4",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EN.STEP_SIZE = num end
+    end,
+})
+
+EscapeNormalSection:Input({
+    Title       = "Step Wait",
+    Desc        = "Seconds between each movement tick (default: 0.03).",
+    Placeholder = "Default: 0.03",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EN.STEP_WAIT = num end
+    end,
+})
+
+EscapeNormalSection:Input({
+    Title       = "Arrive Distance",
+    Desc        = "Studs from waypoint considered 'arrived' (default: 4).",
+    Placeholder = "Default: 4",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EN.ARRIVE_DIST = num end
+    end,
+})
+
+EscapeNormalSection:Input({
+    Title       = "Death Restart Delay",
+    Desc        = "Seconds to wait before restarting after death (default: 5).",
+    Placeholder = "Default: 5",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EN.DEATH_RESTART = num end
+    end,
+})
+
+EscapeNormalSection:Button({
+    Title    = "Reset Auto Escape (Normal)",
+    Desc     = "Stop the escape and restore all settings to default.",
+    Callback = function()
+        enStop()
+        EN.STEP_SIZE     = 1.4
+        EN.STEP_WAIT     = 0.03
+        EN.ARRIVE_DIST   = 4
+        EN.DEATH_RESTART = 5
+        ENToggle:Set(false)
+        WindUI:Notify({
+            Title    = "💨 Auto Escape Reset",
+            Content  = "Normal escape stopped and settings restored.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SECTION: ✨ Auto Escape (Out-of-Bound)
+-- ============================================================
+local EscapeOOBSection = PatientTab:Section({
+    Title  = "✨ Auto Escape (Out-of-Bound)",
+    Box    = false,
+    Opened = true,
+})
+
+-- ── Config ───────────────────────────────────────────────
+local EOB = {
+    Enabled       = false,
+    PLACE_ID      = 132352755769957,
+    BOXED_TEAM    = "Boxed",
+    STEP_SIZE     = 1.4,
+    STEP_WAIT     = 0.03,
+    ARRIVE_DIST   = 4,
+    DEATH_RESTART = 5,
+}
+
+local EOB_WAYPOINTS = {
+    Vector3.new(208, 244, -550), Vector3.new(101, 243, -551),
+    Vector3.new(102, 242, -519), Vector3.new(103, 244, -441),
+    Vector3.new(77, 243, -443),  Vector3.new(78, 243, -414),
+    Vector3.new(42, 244, -423),  Vector3.new(46, 245, -391),
+    Vector3.new(159, 263, -392), Vector3.new(160, 263, -422),
+    Vector3.new(59, 279, -419),  Vector3.new(-76, 282, -416),
+    Vector3.new(-77, 282, -393), Vector3.new(-93, 282, -394),
+    Vector3.new(-96, 368, -384), Vector3.new(-90, 468, -391),
+    Vector3.new(-97, 522, -392), Vector3.new(-98, 520, -328),
+    Vector3.new(-91, 518, -316), Vector3.new(-121, 519, -314),
+    Vector3.new(-104, 519, -258),Vector3.new(-98, 520, -229),
+    Vector3.new(-93, 517, -191), Vector3.new(-78, 518, -82),
+    Vector3.new(-6, 517, -82),   Vector3.new(2, 518, 427)
+}
+
+-- ── State ────────────────────────────────────────────────
+local eobRunning    = false
+local eobNoclipConn = nil
+local eobPlatform   = nil
+local eobThread     = nil
+
+-- ── Helpers ──────────────────────────────────────────────
+local function eobIsBoxed()
+    return player.Team and player.Team.Name == EOB.BOXED_TEAM
+end
+
+local function eobServerHop()
+    local ok, result = pcall(function()
+        return game:HttpGet(
+            "https://games.roblox.com/v1/games/"..EOB.PLACE_ID..
+            "/servers/Public?sortOrder=Asc&limit=100"
+        )
+    end)
+    if ok then
+        local parsed = HttpService:JSONDecode(result)
+        local servers = {}
+        for _, v in pairs(parsed.data) do
+            if v.playing < v.maxPlayers and v.id ~= game.JobId then
+                table.insert(servers, v.id)
+            end
+        end
+        if #servers > 0 then
+            TeleportService:TeleportToPlaceInstance(EOB.PLACE_ID, servers[math.random(1, #servers)])
+        else
+            TeleportService:Teleport(EOB.PLACE_ID)
+        end
+    else
+        pcall(function() TeleportService:Teleport(EOB.PLACE_ID) end)
+    end
+end
+
+local function eobCleanup(hum, prevWalk, prevJump)
+    if eobNoclipConn then eobNoclipConn:Disconnect(); eobNoclipConn = nil end
+    if eobPlatform   then pcall(function() eobPlatform:Destroy() end); eobPlatform = nil end
+    if hum and hum.Parent then
+        hum.WalkSpeed = prevWalk or 16
+        hum.JumpPower = prevJump or 50
+    end
+    local char = player.Character
+    if char then
+        for _, v in ipairs(char:GetDescendants()) do
+            if v:IsA("BasePart") then pcall(function() v.CanCollide = true end) end
+        end
+    end
+end
+
+local function eobStop()
+    eobRunning = false
+    eobCleanup(nil, nil, nil)
+end
+
+local function eobStart()
+    eobRunning = true
+    eobThread  = task.spawn(function()
+        while eobRunning do
+            if eobIsBoxed() then
+                task.wait(10); continue
+            end
+
+            local char = player.Character or player.CharacterAdded:Wait()
+            local root = char:WaitForChild("HumanoidRootPart", 5)
+            local hum  = char:FindFirstChildOfClass("Humanoid")
+            if not root or not hum then task.wait(1); continue end
+
+            if eobNoclipConn then eobNoclipConn:Disconnect() end
+            eobNoclipConn = RunService.Stepped:Connect(function()
+                local c = player.Character
+                if not c then return end
+                for _, v in ipairs(c:GetDescendants()) do
+                    if v:IsA("BasePart") then pcall(function() v.CanCollide = false end) end
+                end
+            end)
+
+            if eobPlatform then pcall(function() eobPlatform:Destroy() end) end
+            eobPlatform              = Instance.new("Part")
+            eobPlatform.Size         = Vector3.new(15, 1, 15)
+            eobPlatform.Anchored     = true
+            eobPlatform.Transparency = 1
+            eobPlatform.CanCollide   = true
+            eobPlatform.Name         = "EscapePlatformOOB"
+            eobPlatform.Parent       = workspace
+
+            local prevWalk = hum.WalkSpeed
+            local prevJump = hum.JumpPower
+            hum.WalkSpeed  = 0
+            hum.JumpPower  = 0
+
+            local died = false
+            for i = 1, #EOB_WAYPOINTS do
+                if not eobRunning then break end
+                local wp = EOB_WAYPOINTS[i]
+                while eobRunning do
+                    if hum.Health <= 0 or not root.Parent then died = true; break end
+                    local pos = root.Position
+                    if (Vector2.new(pos.X, pos.Z) - Vector2.new(wp.X, wp.Z)).Magnitude <= EOB.ARRIVE_DIST then
+                        root.CFrame = CFrame.new(wp)
+                        if eobPlatform and eobPlatform.Parent then
+                            eobPlatform.CFrame = root.CFrame * CFrame.new(0, -3.5, 0)
+                        end
+                        task.wait(0.04); break
+                    end
+                    local dir  = (wp - pos).Unit
+                    local step = math.min(EOB.STEP_SIZE, (wp - pos).Magnitude)
+                    root.CFrame = CFrame.new(pos + dir * step) * (root.CFrame - root.CFrame.Position)
+                    if eobPlatform and eobPlatform.Parent then
+                        eobPlatform.CFrame = root.CFrame * CFrame.new(0, -3.5, 0)
+                    end
+                    task.wait(EOB.STEP_WAIT)
+                end
+                if died then break end
+            end
+
+            eobCleanup(hum, prevWalk, prevJump)
+
+            if not eobRunning then break end
+            if died then
+                task.wait(EOB.DEATH_RESTART)
+            else
+                eobServerHop(); break
+            end
+        end
+    end)
+end
+
+-- ── WindUI Elements ──────────────────────────────────────
+local EOBToggle = EscapeOOBSection:Toggle({
+    Title    = "Enable Auto Escape (OOB)",
+    Desc     = "Navigate the out-of-bounds escape route and server hop on completion.",
+    Default  = false,
+    Callback = function(state)
+        if state then eobStart() else eobStop() end
+    end,
+})
+
+EscapeOOBSection:Input({
+    Title       = "Step Size",
+    Desc        = "Studs moved per tick toward each waypoint (default: 1.4).",
+    Placeholder = "Default: 1.4",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EOB.STEP_SIZE = num end
+    end,
+})
+
+EscapeOOBSection:Input({
+    Title       = "Step Wait",
+    Desc        = "Seconds between each movement tick (default: 0.03).",
+    Placeholder = "Default: 0.03",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EOB.STEP_WAIT = num end
+    end,
+})
+
+EscapeOOBSection:Input({
+    Title       = "Arrive Distance",
+    Desc        = "Studs from waypoint considered 'arrived' (default: 4).",
+    Placeholder = "Default: 4",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EOB.ARRIVE_DIST = num end
+    end,
+})
+
+EscapeOOBSection:Input({
+    Title       = "Death Restart Delay",
+    Desc        = "Seconds to wait before restarting after death (default: 5).",
+    Placeholder = "Default: 5",
+    Callback    = function(value)
+        local num = tonumber(value)
+        if num and num > 0 then EOB.DEATH_RESTART = num end
+    end,
+})
+
+EscapeOOBSection:Button({
+    Title    = "Reset Auto Escape (OOB)",
+    Desc     = "Stop the OOB escape and restore all settings to default.",
+    Callback = function()
+        eobStop()
+        EOB.STEP_SIZE     = 1.4
+        EOB.STEP_WAIT     = 0.03
+        EOB.ARRIVE_DIST   = 4
+        EOB.DEATH_RESTART = 5
+        EOBToggle:Set(false)
+        WindUI:Notify({
+            Title    = "✨ Auto Escape (OOB) Reset",
+            Content  = "OOB escape stopped and settings restored.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- SECTION: 😷 Auto Join Patient
+-- ============================================================
+local AutoJoinSection = PatientTab:Section({
+    Title  = "😷 Auto Join Patient",
+    Box    = false,
+    Opened = true,
+})
+
+local autoJoinEnabled = false
+local autoJoinConn    = nil
+
+local function doAutoJoin()
+    task.spawn(function()
+        local PATIENT_TEAM = Teams:FindFirstChild("PATIENT")
+        local teamChangeRF = ReplicatedStorage:FindFirstChild("TeamChange", true)
+
+        if not PATIENT_TEAM or not teamChangeRF then return end
+
+        local ok, _ = pcall(function()
+            teamChangeRF:InvokeServer(PATIENT_TEAM, "Patient")
+        end)
+
+        if ok then
+            pcall(function()
+                player:SetAttribute("InMenu", false)
+                player:SetAttribute("CurrentTeamIndex", 1)
+                workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+            end)
+            WindUI:Notify({
+                Title    = "😷 Auto Join",
+                Content  = "Successfully joined the Patient team!",
+                Icon     = "solar:check-circle-bold",
+                Duration = 4,
+            })
+        end
+    end)
+end
+
+local AutoJoinToggle = AutoJoinSection:Toggle({
+    Title    = "Enable Auto Join Patient",
+    Desc     = "Automatically join the PATIENT team. Re-fires on respawn while toggled on.",
+    Default  = false,
+    Callback = function(state)
+        autoJoinEnabled = state
+        if state then
+            -- Fire immediately on enable
+            doAutoJoin()
+            -- Re-fire on each respawn while toggle is on
+            autoJoinConn = player.CharacterAdded:Connect(function()
+                if autoJoinEnabled then
+                    task.wait(0.5)
+                    doAutoJoin()
+                end
+            end)
+        else
+            if autoJoinConn then
+                autoJoinConn:Disconnect()
+                autoJoinConn = nil
+            end
+        end
+    end,
+})
+
+AutoJoinSection:Button({
+    Title    = "Join Patient Now",
+    Desc     = "Fire the team join request once manually.",
+    Callback = function()
+        doAutoJoin()
+    end,
+})
+
+
+-- ============================================================
+-- TAB SECTION: Teleport
+-- ============================================================
+Window:Section({
+    Title  = "Teleport",
+    Opened = true,
+})
+
+-- ============================================================
+-- TAB: Attach Teleport
+-- ============================================================
+local AttachTab = Window:Tab({
+    Title = "Attach Teleport",
+    Icon  = "anchor",
+})
+
+-- ============================================================
+-- TAB: Place Teleport (empty for now)
+-- ============================================================
+local PlaceTab = Window:Tab({
+    Title = "Place Teleport",
+    Icon  = "map",
+})
+
+-- ============================================================
+-- ATTACH — CONFIG (mutable by inputs)
+-- ============================================================
+local ATTACH_DIST   = 3.0
+local GLIDE_SPEED   = 60
+local JITTER_RANGE  = 0.30
+local SCAN_INTERVAL = 0.3
+
+-- ============================================================
+-- ATTACH — STATE
+-- ============================================================
+local attachRunning     = false
+local attachNoclipConn  = nil
+local attachTarget      = nil   -- resolved Player object (updated by scanner)
+local attachPinned      = {}    -- [playerName]=true; empty = use nearest
+local attachTeamFilter  = {}    -- [teamName]=true; empty = all teams
+
+-- ============================================================
+-- ATTACH — CORE LOGIC
+-- ============================================================
+local function attachIsValid(p)
+    if p == player then return false end
+    local char = p.Character
+    local hum  = char and char:FindFirstChildOfClass("Humanoid")
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    if not hum or hum.Health <= 0 or not root then return false end
+    if next(attachTeamFilter) ~= nil then
+        local tn = p.Team and p.Team.Name
+        if not tn or not attachTeamFilter[tn] then return false end
+    end
+    return true
+end
+
+local function attachGetNearest()
+    local myChar = player.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+    local best, bestDist = nil, math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if attachIsValid(p) then
+            local root = p.Character:FindFirstChild("HumanoidRootPart")
+            if root then
+                local d = (myRoot.Position - root.Position).Magnitude
+                if d < bestDist then bestDist = d; best = p end
+            end
+        end
+    end
+    return best
+end
+
+local function attachResolve()
+    -- If specific players are pinned, pick the nearest valid one among them
+    if next(attachPinned) ~= nil then
+        local myChar = player.Character
+        local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+        local best, bestDist = nil, math.huge
+        for name, _ in pairs(attachPinned) do
+            local p = Players:FindFirstChild(name)
+            if p and attachIsValid(p) then
+                if myRoot then
+                    local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+                    if root then
+                        local d = (myRoot.Position - root.Position).Magnitude
+                        if d < bestDist then bestDist = d; best = p end
+                    end
+                else
+                    best = p; break
+                end
+            end
+        end
+        if best then return best end
+    end
+    return attachGetNearest()
+end
+
+local function attachDoNoclip()
+    if attachNoclipConn then attachNoclipConn:Disconnect() end
+    attachNoclipConn = RunService.Stepped:Connect(function()
+        local char = player.Character
+        if not char then return end
+        for _, part in ipairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                pcall(function() part.CanCollide = false end)
+            end
+        end
+    end)
+end
+
+local function attachCleanup()
+    if attachNoclipConn then attachNoclipConn:Disconnect(); attachNoclipConn = nil end
+    local char = player.Character
+    if char then
+        for _, part in ipairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                pcall(function() part.CanCollide = true end)
+            end
+        end
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if root then
+            root.AssemblyLinearVelocity = Vector3.zero
+            local bv = root:FindFirstChild("GlideVelocity")
+            if bv then bv:Destroy() end
+        end
+    end
+    attachTarget  = nil
+end
+
+local function attachStop()
+    attachRunning = false
+    attachCleanup()
+end
+
+local function attachStart()
+    attachRunning = true
+    attachDoNoclip()
+
+    -- Scanner loop
+    task.spawn(function()
+        while attachRunning do
+            attachTarget = attachResolve()
+            task.wait(SCAN_INTERVAL)
+        end
+    end)
+
+    -- Glide engine
+    task.spawn(function()
+        while attachRunning do
+            local dt = RunService.Heartbeat:Wait()
+            if not attachRunning then break end
+
+            local myChar = player.Character
+            local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+            if not myRoot then continue end
+
+            local tgt = attachTarget
+            if tgt and tgt.Character then
+                local tChar = tgt.Character
+                local tRoot = tChar:FindFirstChild("HumanoidRootPart")
+                local tHum  = tChar:FindFirstChildOfClass("Humanoid")
+
+                if tRoot and tHum and tHum.Health > 0 then
+                    local tPos    = tRoot.Position
+                    local tLook   = tRoot.CFrame.LookVector
+                    local goalPos = tPos - (tLook * ATTACH_DIST)
+                    local currPos = myRoot.Position
+                    local dirVec  = goalPos - currPos
+                    local dist    = dirVec.Magnitude
+
+                    local jitter = Vector3.new(
+                        math.random(-100,100)/100 * JITTER_RANGE,
+                        math.random(-100,100)/100 * JITTER_RANGE,
+                        math.random(-100,100)/100 * JITTER_RANGE
+                    )
+
+                    if dist > 5 then
+                        local step    = GLIDE_SPEED * dt
+                        local nextPos = currPos + (dirVec.Unit * math.min(step, dist))
+                        myRoot.CFrame = CFrame.lookAt(nextPos + jitter, tPos)
+                        myRoot.AssemblyLinearVelocity = dirVec.Unit * GLIDE_SPEED
+                    else
+                        myRoot.CFrame = CFrame.lookAt(goalPos + jitter, tPos)
+                        myRoot.AssemblyLinearVelocity = tRoot.AssemblyLinearVelocity
+                    end
+                else
+                    attachTarget = nil
+                end
+            else
+                myRoot.AssemblyLinearVelocity = Vector3.zero
+            end
+        end
+        attachCleanup()
+    end)
+end
+
+-- ============================================================
+-- ATTACH — SECTION & WINDUI ELEMENTS
+-- Order: Toggle → Player Dropdown → Team Dropdown → Inputs → Button
+-- ============================================================
+-- helpers defined first so everything below can call them
+local function getAttachPlayerNames()
+    local names = {}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= player then table.insert(names, p.Name) end
+    end
+    return names
+end
+
+local function getAttachTeamNames()
+    local names = {}
+    for _, t in ipairs(Teams:GetTeams()) do
+        table.insert(names, t.Name)
+    end
+    return names
+end
+
+local AttachSection = AttachTab:Section({
+    Title  = "⛓️ Attach Player",
+    Box    = false,
+    Opened = true,
+})
+
+local AttachToggle = AttachSection:Toggle({
+    Title    = "Attach",
+    Desc     = "Glide and lock onto the selected player (or nearest valid if none picked).",
+    Default  = false,
+    Callback = function(state)
+        if state then attachStart() else attachStop() end
+    end,
+})
+
+AttachSection:Input({
+    Title       = "Attach Distance",
+    Desc        = "Studs behind the target to hover at (default: 3.0).",
+    Placeholder = "Default: 3.0",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n >= 0 then ATTACH_DIST = n end
+    end,
+})
+
+AttachSection:Input({
+    Title       = "Glide Speed",
+    Desc        = "Studs per second toward the target (default: 60).",
+    Placeholder = "Default: 60",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then GLIDE_SPEED = n end
+    end,
+})
+
+AttachSection:Input({
+    Title       = "Jitter Range",
+    Desc        = "Shake intensity to help evade detection (default: 0.30).",
+    Placeholder = "Default: 0.30",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n >= 0 then JITTER_RANGE = n end
+    end,
+})
+
+AttachSection:Input({
+    Title       = "Scan Interval",
+    Desc        = "Seconds between target rescans (default: 0.3).",
+    Placeholder = "Default: 0.3",
+    Callback    = function(v)
+        local n = tonumber(v)
+        if n and n > 0 then SCAN_INTERVAL = n end
+    end,
+})
+
+AttachSection:Button({
+    Title    = "Reset Attach Settings",
+    Desc     = "Stop attach and restore all settings to default.",
+    Callback = function()
+        attachStop()
+        ATTACH_DIST      = 3.0
+        GLIDE_SPEED      = 60
+        JITTER_RANGE     = 0.30
+        SCAN_INTERVAL    = 0.3
+        attachPinned     = {}
+        attachTeamFilter = {}
+        AttachToggle:Set(false)
+        AttachPlayerDropdown:Refresh(getAttachPlayerNames(), {})
+        AttachTeamDropdown:Refresh(getAttachTeamNames(), {})
+        WindUI:Notify({
+            Title    = "⛓️ Attach Reset",
+            Content  = "Attach stopped and settings restored to default.",
+            Icon     = "solar:refresh-bold",
+            Duration = 3,
+        })
+    end,
+})
+
+-- ============================================================
+-- ATTACH — SECTION: Choose Team (Player & Team dropdowns)
+-- ============================================================
+local ChooseTeamSection = AttachTab:Section({
+    Title  = "👥 Choose Team",
+    Box    = false,
+    Opened = true,
+})
+
+local AttachPlayerDropdown = ChooseTeamSection:Dropdown({
+    Title     = "Choose Player",
+    Desc      = "Pick one or more players to target. Leave blank to target all players (or filter by team below).",
+    Values    = getAttachPlayerNames(),
+    Value     = {},
+    Multi     = true,
+    AllowNone = true,
+    Callback  = function(selected)
+        attachPinned = {}
+        if type(selected) == "table" then
+            for _, name in pairs(selected) do attachPinned[name] = true end
+        elseif type(selected) == "string" and selected ~= "" then
+            attachPinned[selected] = true
+        end
+    end,
+})
+
+Players.PlayerAdded:Connect(function()
+    task.wait(0.1)
+    AttachPlayerDropdown:Refresh(getAttachPlayerNames(), {})
+end)
+Players.PlayerRemoving:Connect(function(p)
+    attachPinned[p.Name] = nil
+    task.wait(0.1)
+    AttachPlayerDropdown:Refresh(getAttachPlayerNames(), {})
+end)
+
+local AttachTeamDropdown = ChooseTeamSection:Dropdown({
+    Title     = "Choose Team",
+    Desc      = "Restrict targeting to players on these teams. Leave blank to allow all teams.",
+    Values    = getAttachTeamNames(),
+    Value     = {},
+    Multi     = true,
+    AllowNone = true,
+    Callback  = function(selected)
+        attachTeamFilter = {}
+        if type(selected) == "table" then
+            for _, v in pairs(selected) do attachTeamFilter[v] = true end
+        elseif type(selected) == "string" and selected ~= "" then
+            attachTeamFilter[selected] = true
+        end
+    end,
+})
+
+Teams.ChildAdded:Connect(function(c)
+    if c:IsA("Team") then
+        task.wait(0.1)
+        AttachTeamDropdown:Refresh(getAttachTeamNames(), {})
+    end
+end)
+Teams.ChildRemoved:Connect(function(c)
+    if c:IsA("Team") then
+        attachTeamFilter = {}
+        AttachTeamDropdown:Refresh(getAttachTeamNames(), {})
+    end
+end)
